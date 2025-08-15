@@ -1,0 +1,22 @@
+.input {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+
+    background: transparent;
+}
+
+.input:user-valid {
+    outline-color: green;
+}
+
+.input:user-invalid {
+    outline-color: red;
+}
+
+.input:valid:not(:placeholder-shown):focus {
+    outline-color: aqua;
+}
+
+.input:invalid:not(:placeholder-shown):focus {
+    outline-color: blueviolet;
+}

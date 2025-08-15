@@ -1,0 +1,147 @@
+@import url("./normalize.css");
+
+:root {
+    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-weight: 400;
+
+    line-height: 1.5;
+
+    color: rgb(255 255 255 / 87%);
+
+    color-scheme: light dark;
+
+    background-color: #242424;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-synthesis: none;
+    text-rendering: optimizelegibility;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    scrollbar-gutter: stable;
+    hanging-punctuation: first last;
+}
+
+body {
+    display: flex;
+
+    flex-direction: column;
+
+    place-items: center;
+
+    min-width: 320px;
+    min-height: 100svh;
+
+    margin: 0;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+.container {
+    inline-size: min(100% - 2rem, 1280px);
+    /* width: min(100% - 2rem, 1280px); */
+
+    margin-inline: auto;
+}
+
+img,
+picture,
+svg {
+    max-width: 100%;
+    height: auto;
+
+    font-style: italic;
+
+    vertical-align: middle;
+
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    shape-margin: 0.75rem;
+}
+
+p,
+li,
+figcaption {
+    text-wrap: pretty;
+}
+
+a {
+    font-weight: 500;
+
+    color: #646cff;
+
+    text-decoration: inherit;
+}
+
+a:hover {
+    color: #535bf2;
+}
+
+h1 {
+    font-size: 3.2em;
+
+    line-height: 1.1;
+}
+
+button {
+    padding: 0.6em 1.2em;
+
+    font-family: inherit;
+    font-size: 1em;
+    font-weight: 500;
+
+    cursor: pointer;
+
+    background-color: #1a1a1a;
+    border: 1px solid transparent;
+    border-radius: 8px;
+
+    transition: border-color 0.25s;
+}
+
+button:hover {
+    border-color: #646cff;
+}
+
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        color: #213547;
+
+        background-color: #fff;
+    }
+
+    a:hover {
+        color: #747bff;
+    }
+
+    button {
+        background-color: #f9f9f9;
+    }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    :has(:target) {
+        scroll-behavior: smooth;
+
+        /* scroll-padding-top: 3rem; */
+    }
+}

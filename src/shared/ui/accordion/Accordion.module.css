@@ -1,0 +1,32 @@
+.accordion {
+    padding-block: 0;
+
+    overflow: clip;
+
+    summary {
+        list-style-position: outside;
+    }
+
+    * {
+        margin: 0;
+    }
+}
+
+@supports selector(::details-content) {
+    :root {
+        interpolate-size: allow-keywords;
+    }
+
+    .accordion::details-content {
+        block-size: 0;
+
+        transition:
+            block-size 1s,
+            content-visibility 1s;
+        transition-behavior: allow-discrete;
+    }
+
+    .accordion[open]::details-content {
+        block-size: auto;
+    }
+}
