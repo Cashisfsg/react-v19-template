@@ -1,16 +1,17 @@
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
-
 interface SwitchProps
     extends Omit<React.ComponentPropsWithRef<"button">, "type" | "role"> {}
 
 export const Switch: React.FC<SwitchProps> = ({
-    "aria-checked": ariaChecked = false,
+    "aria-checked": ariaChecked,
     onClick,
     ...props
 }) => {
     const onClickHandler: React.MouseEventHandler<
         HTMLButtonElement
     > = event => {
+        if (ariaChecked !== undefined) return;
+
         const button = event.currentTarget;
         const checked = button.getAttribute("aria-checked") === "true";
 
@@ -22,7 +23,7 @@ export const Switch: React.FC<SwitchProps> = ({
             {...props}
             type="button"
             role="switch"
-            aria-checked={ariaChecked}
+            aria-checked={ariaChecked || false}
             onClick={composeEventHandlers(onClick, onClickHandler)}
         />
     );

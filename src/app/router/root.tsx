@@ -8,6 +8,7 @@ import {
 } from "react-router";
 
 import "~/app/styles/index.css";
+
 import type { Route } from "./+types/root";
 // import type { Route } from "../../+types/root";
 

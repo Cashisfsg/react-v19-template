@@ -1,13 +1,15 @@
 import { Suspense, useState } from "react";
+
 import "~/app/styles/index.css";
+
 import { CountDownTimer } from "~/shared/ui/countdown-timer/countdown-timer";
+import { Section } from "~/shared/ui/section";
+import { Switch } from "~/shared/ui/switch";
+
 import "./App.css";
 import { default as reactLogo, default as viteLogo } from "./assets/react.svg";
-
-import { Switch } from "~/shared/ui/switch";
+import { Tabs } from "./shared/ui/tabs";
 import { Users } from "./Users";
-
-import { Section } from "~/shared/ui/section";
 
 function App() {
     const [count, setCount] = useState(0);
@@ -40,7 +42,11 @@ function App() {
             </div>
             <h1>Vite + React</h1>
             <div className="card">
-                <button onClick={() => setCount(count => count + 1)}>
+                <button
+                    onClick={() => {
+                        setCount(count => count + 1);
+                    }}
+                >
                     count is {count}
                 </button>
                 <p>
@@ -60,6 +66,18 @@ function App() {
 
                 {/* <Section.Label>Label #1</Section.Label> */}
             </Section.Root>
+
+            <Tabs.Root>
+                <Tabs.List>
+                    <Tabs.Trigger value="1">Tab 1</Tabs.Trigger>
+                    <Tabs.Trigger value="2">Tab 2</Tabs.Trigger>
+                    <Tabs.Trigger value="3">Tab 3</Tabs.Trigger>
+                </Tabs.List>
+
+                <Tabs.Content value="1">Content 1</Tabs.Content>
+                <Tabs.Content value="2">Content 2</Tabs.Content>
+                <Tabs.Content value="3">Content 3</Tabs.Content>
+            </Tabs.Root>
 
             <CountDownTimer />
 

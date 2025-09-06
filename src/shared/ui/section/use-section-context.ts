@@ -1,9 +1,9 @@
 import { createContext, use } from "react";
 
 export const SectionContext = createContext<{
-    ariaLabels: string[];
     rootElement: string;
-    descriptionId: string;
+    ariaLabels: Set<string>;
+    ariaDescriptions: Set<string>;
 } | null>(null);
 
 export const useSectionContext = () => {
