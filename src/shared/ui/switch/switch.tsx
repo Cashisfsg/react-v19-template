@@ -21,8 +21,8 @@ export const Switch: React.FC<SwitchProps> = ({
     return (
         <button
             {...props}
-            type="button"
             role="switch"
+            type="button"
             aria-checked={ariaChecked || false}
             onClick={composeEventHandlers(onClick, onClickHandler)}
         />

@@ -3,7 +3,6 @@ import { createContext, use } from "react";
 export type TabsContextType = {
     value: string;
     setValue: (value: string) => void;
-    registerTab: (ref: HTMLButtonElement) => void;
     tabsRefs: React.RefObject<HTMLButtonElement[]>;
 };
 

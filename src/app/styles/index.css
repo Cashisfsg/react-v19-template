@@ -52,6 +52,7 @@ h6 {
 
 .container {
     inline-size: min(100% - 2rem, 1280px);
+
     /* width: min(100% - 2rem, 1280px); */
 
     margin-inline: auto;

@@ -1,0 +1,72 @@
+body:has(div[inert]) {
+    overflow-y: hidden;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+
+    display: none;
+
+    width: clamp(320px, 100vw - 2rem, 768px);
+    min-width: 320px;
+
+    margin: auto;
+
+    overflow-y: auto;
+
+    overscroll-behavior: none;
+
+    color: inherit;
+
+    background: transparent;
+
+    opacity: 0;
+
+    scale: 0.8;
+
+    /* transition-property: display scale opacity; */
+    transition-duration: 0.5s;
+    transition-behavior: allow-discrete;
+}
+
+.modal:modal {
+    display: grid;
+
+    opacity: 1;
+
+    scale: 1;
+
+    @starting-style {
+        opacity: 0;
+
+        scale: 0.8;
+    }
+}
+
+.modal::backdrop {
+    background: rgb(0 0 0 / 25%);
+
+    opacity: 0;
+
+    backdrop-filter: blur(8px);
+
+    transition-duration: inherit;
+    transition-behavior: allow-discrete;
+}
+
+.modal:modal::backdrop {
+    opacity: 1;
+}
+
+@starting-style {
+    .modal:modal::backdrop {
+        background: rgb(0 0 0 / 0%);
+
+        opacity: 0;
+    }
+}
+
+.content {
+    display: contents;
+}

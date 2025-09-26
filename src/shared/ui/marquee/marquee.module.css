@@ -1,0 +1,35 @@
+:where(.marquee) {
+    --gap: 1rem;
+
+    display: flex;
+
+    column-gap: var(--gap);
+
+    overflow: hidden;
+
+    user-select: none;
+}
+
+:where(.marquee-list) {
+    display: flex;
+
+    flex-shrink: 0;
+
+    column-gap: var(--gap);
+    align-items: center;
+    justify-content: space-around;
+
+    min-width: 100%;
+
+    padding: 0;
+
+    list-style-type: none;
+
+    animation: scroll 20s linear infinite;
+}
+
+@keyframes scroll {
+    to {
+        transform: translateX(calc(-100% - var(--gap)));
+    }
+}

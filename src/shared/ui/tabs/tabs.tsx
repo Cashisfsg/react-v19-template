@@ -30,15 +30,9 @@ export const Root: React.FC<RootProps> = ({
         onValueChange?.(newValue);
     };
 
-    const registerTab = (ref: HTMLButtonElement) => {
-        if (!tabsRefs.current.includes(ref)) {
-            tabsRefs.current.push(ref);
-        }
-    };
-
     return (
         <TabsContext.Provider
-            value={{ value: currentValue, setValue, registerTab, tabsRefs }}
+            value={{ value: currentValue, setValue, tabsRefs }}
         >
             <div {...props} />
         </TabsContext.Provider>
@@ -79,12 +73,7 @@ export const Trigger: React.FC<TriggerProps> = ({
     ref,
     ...props
 }) => {
-    const {
-        value: activeValue,
-        setValue,
-        registerTab,
-        tabsRefs
-    } = useTabsContext();
+    const { value: activeValue, setValue, tabsRefs } = useTabsContext();
 
     const isActive = activeValue === value;
 
@@ -120,15 +109,16 @@ export const Trigger: React.FC<TriggerProps> = ({
         }
 
         event.preventDefault();
+        event.stopPropagation();
         const newTab = tabs[newIndex];
         newTab.focus();
         newTab.click();
     };
 
     const callbackRef: React.RefCallback<HTMLButtonElement> = node => {
-        if (!node) return;
+        if (!node || tabsRefs.current.includes(node)) return;
 
-        registerTab(node);
+        tabsRefs.current.push(node);
     };
 
     return (
