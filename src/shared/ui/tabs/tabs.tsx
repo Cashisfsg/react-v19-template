@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Activity, useRef, useState } from "react";
 
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
 import { composeRefs } from "~/shared/lib/utils/compose-refs";
@@ -147,27 +147,23 @@ interface ContentProps
     value: string;
 }
 
-export const Content: React.FC<ContentProps> = ({
-    value,
-    children,
-    ...props
-}) => {
+export const Content: React.FC<ContentProps> = ({ value, ...props }) => {
     const { value: activeValue } = useTabsContext();
 
     const isActive = activeValue === value;
 
     return (
-        <div
-            {...props}
-            key={value}
-            id={`panel-${value}`}
-            role="tabpanel"
-            hidden={!isActive}
-            aria-labelledby={`tab-${value}`}
-            tabIndex={0}
-        >
-            {isActive ? children : null}
-        </div>
+        <Activity mode={isActive ? "visible" : "hidden"}>
+            <div
+                {...props}
+                key={value}
+                id={`panel-${value}`}
+                role="tabpanel"
+                hidden={!isActive}
+                aria-labelledby={`tab-${value}`}
+                tabIndex={0}
+            />
+        </Activity>
     );
 };
 
