@@ -1,0 +1,121 @@
+@layer components {
+    :where(.progress) {
+        /* Neutral by default, so the bar reads on any page; a project sets its
+           own colours through these. */
+        --track: var(
+            --progress-track,
+            color-mix(in srgb, currentcolor 20%, transparent)
+        );
+        --track-size: var(--progress-size, min(10px, 1ex));
+        --fill: var(--progress-fill, currentcolor);
+        --radius: 1e3px;
+        --indeterminate-track: linear-gradient(
+            to right,
+            var(--track) 45%,
+            var(--fill) 0%,
+            var(--fill) 55%,
+            var(--track) 0%
+        );
+        --indeterminate-track-size: 225% 100%;
+        --indeterminate-track-animation: progress-loading 2s infinite ease;
+
+        position: relative;
+
+        inline-size: 100%;
+        block-size: var(--track-size);
+
+        overflow: hidden;
+
+        appearance: none;
+
+        border: none;
+        border-radius: var(--radius);
+    }
+
+    :where(.progress):focus-visible {
+        outline-color: var(--fill);
+    }
+
+    /* Safari/Chromium */
+    :where(.progress)[value]::-webkit-progress-bar {
+        background: var(--track);
+        border-radius: var(--radius);
+    }
+
+    :where(.progress)[value]::-webkit-progress-value {
+        background: var(--fill);
+        border-radius: var(--radius);
+
+        transition: inline-size 0.25s ease-out;
+    }
+
+    /* Firefox */
+    :where(.progress)[value]::-moz-progress-bar {
+        background: var(--fill);
+        border-radius: var(--radius);
+    }
+
+    /* indeterminate */
+    :where(.progress):indeterminate::after {
+        position: absolute;
+        inset: 0;
+
+        content: "";
+
+        background: var(--indeterminate-track);
+        background-position: right;
+        background-size: var(--indeterminate-track-size);
+
+        animation: var(--indeterminate-track-animation);
+    }
+
+    :where(.progress):indeterminate::-webkit-progress-bar {
+        background: var(--indeterminate-track);
+        background-position: right;
+        background-size: var(--indeterminate-track-size);
+
+        animation: var(--indeterminate-track-animation);
+    }
+
+    :where(.progress):indeterminate::-moz-progress-bar {
+        background: var(--indeterminate-track);
+        background-position: right;
+        background-size: var(--indeterminate-track-size);
+
+        animation: var(--indeterminate-track-animation);
+    }
+
+    /* complete */
+    :where(.progress):not([max])[value="1"]::before,
+    :where(.progress)[max="100"][value="100"]::before {
+        position: absolute;
+        inset-block: 0;
+        inset-inline: auto 0;
+
+        display: flex;
+
+        align-items: center;
+
+        padding-inline-end: max(calc(var(--track-size) / 4), 3px);
+
+        font-size: calc(var(--track-size) / 1.25);
+
+        color: Canvas;
+
+        content: "\2713";
+    }
+
+    @keyframes progress-loading {
+        50% {
+            background-position: left;
+        }
+    }
+
+    /* The indeterminate sweep runs for as long as the wait does; with reduced
+       motion it slows to a pulse rather than racing across. */
+    @media (prefers-reduced-motion: reduce) {
+        :where(.progress) {
+            --indeterminate-track-animation: progress-loading 6s infinite ease;
+        }
+    }
+}
