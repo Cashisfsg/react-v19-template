@@ -3,9 +3,17 @@
        where it sits is Anchor's. Zero specificity, so a caller's own styles
        win. */
     :where(.tooltip) {
+        /* A sentence or two, not a paragraph: a longer text wraps instead of
+           running the width of the screen. In `ch`, so it follows the font.
+           A caller widens it through --tooltip-max-inline-size. */
+        max-inline-size: var(--tooltip-max-inline-size, 25ch);
+
         padding: 0;
 
         color: inherit;
+
+        /* A URL or a long word breaks rather than spilling out. */
+        overflow-wrap: anywhere;
 
         background: transparent;
         border: none;
