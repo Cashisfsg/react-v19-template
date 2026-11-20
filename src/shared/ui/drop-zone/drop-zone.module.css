@@ -1,0 +1,72 @@
+@layer components {
+    /* Zero specificity, so a caller's own look wins. The colours come from
+       --drop-zone-border, --drop-zone-active and --drop-zone-focus-ring. */
+    :where(.drop-zone) {
+        /* Holds the hidden input, so focusing it scrolls to the box. */
+        position: relative;
+
+        display: grid;
+
+        place-items: center;
+
+        padding: 2rem 1rem;
+
+        text-align: center;
+
+        cursor: pointer;
+
+        border: 2px dashed
+            var(
+                --drop-zone-border,
+                color-mix(in srgb, currentcolor 35%, transparent)
+            );
+        border-radius: 0.75rem;
+
+        transition:
+            background-color 0.15s ease,
+            border-color 0.15s ease;
+    }
+
+    :where(.drop-zone[data-dragover]) {
+        background: color-mix(
+            in srgb,
+            var(--drop-zone-active, Highlight) 12%,
+            transparent
+        );
+        border-color: var(--drop-zone-active, Highlight);
+        border-style: solid;
+    }
+
+    /* The input holds the focus, so its ring is drawn on the box it names. */
+    :where(.drop-zone:has(.input:focus-visible)) {
+        outline: 2px solid var(--drop-zone-focus-ring, Highlight);
+        outline-offset: 2px;
+    }
+
+    :where(.drop-zone[data-disabled]) {
+        cursor: not-allowed;
+
+        opacity: 0.6;
+    }
+
+    /* Out of sight but not out of reach: still focusable and still named,
+       which `display: none` would undo. */
+    :where(.input) {
+        position: absolute;
+
+        inline-size: 1px;
+        block-size: 1px;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        clip-path: inset(50%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :where(.drop-zone) {
+            transition: none;
+        }
+    }
+}
