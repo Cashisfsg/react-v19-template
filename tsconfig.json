@@ -1,7 +1,69 @@
 {
-    "files": [],
-    "references": [
-        { "path": "./tsconfig.app.json" },
-        { "path": "./tsconfig.node.json" }
-    ]
+    "include": [
+        "**/*",
+        "**/.server/**/*",
+        "**/.client/**/*",
+        ".react-router/types/**/*"
+    ],
+    "exclude": ["node_modules", "build"],
+
+    "compilerOptions": {
+        "target": "ES2022",
+        "lib": ["ES2022", "DOM", "DOM.Iterable"],
+        "module": "ES2022",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "resolveJsonModule": true,
+        "jsx": "react-jsx",
+
+        // TypeScript 6 no longer loads every @types package by default.
+        // vite/client types import.meta.env and asset imports.
+        "types": ["node", "vite/client"],
+
+        // The route types React Router generates sit beside the route modules.
+        "rootDirs": [".", "./.react-router/types"],
+        "paths": {
+            "~/*": ["./src/*"]
+        },
+
+        "strict": true,
+
+        // arr[i] and record[key] are T | undefined: an index can always miss.
+        "noUncheckedIndexedAccess": true,
+
+        // An optional property may be missing, but not set to undefined: the
+        // two are different, and this is the only flag that keeps them apart.
+        "exactOptionalPropertyTypes": true,
+
+        // ESLint reports unused variables already. These stay for what it cannot
+        // see: TypeScript `private` class members, and a setter whose parameter
+        // is never read. `_` exempts parameters only, not plain locals.
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+
+        // Not implied by strict: a function with a return type that can fall
+        // off its own end.
+        "noImplicitReturns": true,
+
+        // A policy rather than a duplicate of ESLint's no-fallthrough, which
+        // accepts a `// falls through` comment; the compiler accepts nothing.
+        "noFallthroughCasesInSwitch": true,
+
+        // typescript-eslint turns off no-unreachable because the compiler checks
+        // it, but the compiler only errors on unreachable code when this is false.
+        "allowUnreachableCode": false,
+
+        "noImplicitOverride": true,
+        "noUncheckedSideEffectImports": true,
+
+        // Bans enums, runtime namespaces, parameter properties and
+        // `import = require()`. Nothing strips types here; it is on for the ban.
+        "erasableSyntaxOnly": true,
+
+        "verbatimModuleSyntax": true,
+        "isolatedModules": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "noEmit": true
+    }
 }

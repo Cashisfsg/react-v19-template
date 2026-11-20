@@ -10,7 +10,7 @@
         "build": "react-router build",
         "dev": "react-router dev",
         "start": "react-router-serve ./build/server/index.js",
-        "typecheck": "react-router typegen && tsc -b",
+        "typecheck": "react-router typegen && tsc",
         "lint:style": "stylelint \"src/**/*.css\" --max-warnings 0 --report-needless-disables --report-invalid-scope-disables --report-descriptionless-disables",
         "lint:style:fix": "stylelint \"src/**/*.css\" --fix",
         "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
