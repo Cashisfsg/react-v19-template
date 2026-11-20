@@ -9,6 +9,8 @@ import {
 
 import "~/app/styles/index.css";
 
+import styles from "./root.module.css";
+
 import type { Route } from "./+types/root";
 // import type { Route } from "../../+types/root";
 
@@ -67,11 +69,11 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
     }
 
     return (
-        <main className="container mx-auto p-4 pt-16">
+        <main className={styles.error}>
             <h1>{message}</h1>
             <p>{details}</p>
             {stack && (
-                <pre className="w-full overflow-x-auto p-4">
+                <pre className={styles.stack}>
                     <code>{stack}</code>
                 </pre>
             )}

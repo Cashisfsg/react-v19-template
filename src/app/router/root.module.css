@@ -1,0 +1,14 @@
+.error {
+    inline-size: min(100% - 2rem, 1280px);
+
+    padding: 4rem 1rem 1rem;
+    margin-inline: auto;
+}
+
+.stack {
+    inline-size: 100%;
+
+    padding: 1rem;
+
+    overflow-x: auto;
+}

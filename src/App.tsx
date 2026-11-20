@@ -6,7 +6,7 @@ import { CountDownTimer } from "~/shared/ui/countdown-timer/countdown-timer";
 import { Section } from "~/shared/ui/section";
 import { Switch } from "~/shared/ui/switch";
 
-import "./App.css";
+import styles from "./App.module.css";
 import { default as reactLogo, default as viteLogo } from "./assets/react.svg";
 import { Dialog } from "./shared/ui/dialog";
 import { Marquee } from "./shared/ui/marquee";
@@ -29,7 +29,7 @@ function App() {
                 </Marquee.List>
             </Marquee.Root>
 
-            <nav className="navigation">
+            <nav className={styles.navigation}>
                 <ul>
                     <li>
                         <a href="#">
@@ -92,7 +92,7 @@ function App() {
                 >
                     <img
                         src={viteLogo}
-                        className="logo"
+                        className={styles.logo}
                         alt="Vite logo"
                     />
                 </a>
@@ -103,13 +103,13 @@ function App() {
                 >
                     <img
                         src={reactLogo}
-                        className="logo react"
+                        className={`${styles.logo} ${styles.react}`}
                         alt="React logo"
                     />
                 </a>
             </div>
             <h1>Vite + React</h1>
-            <div className="card">
+            <div className={styles.card}>
                 <button
                     onClick={() => {
                         setCount(count => count + 1);
@@ -123,7 +123,7 @@ function App() {
                 <Switch>Switch</Switch>
             </div>
 
-            <p className="read-the-docs">
+            <p className={styles["read-the-docs"]}>
                 Click on the Vite and React logos to learn more
             </p>
             <Dialog.Root>

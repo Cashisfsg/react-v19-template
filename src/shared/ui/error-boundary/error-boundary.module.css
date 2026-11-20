@@ -1,0 +1,37 @@
+.fallback {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 0.5rem;
+
+    align-items: center;
+    justify-content: center;
+
+    min-block-size: 200px;
+
+    padding: 1rem;
+
+    text-align: center;
+}
+
+.title {
+    margin: 0;
+
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    line-height: 1.75rem;
+
+    color: var(--color-destructive, #dc2626);
+}
+
+.message {
+    margin: 0;
+
+    font-size: 0.875rem;
+
+    line-height: 1.25rem;
+
+    color: var(--color-muted-foreground, #6b7280);
+}

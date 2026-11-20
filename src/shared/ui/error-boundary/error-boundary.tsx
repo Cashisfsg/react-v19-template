@@ -1,5 +1,7 @@
 import { Component } from "react";
 
+import styles from "./error-boundary.module.css";
+
 interface ErrorBoundaryProps {
     children: React.ReactNode;
     fallback?:
@@ -64,14 +66,10 @@ export class ErrorBoundary extends Component<
             return (
                 <div
                     role="alert"
-                    className="flex min-h-[200px] flex-col items-center justify-center p-4 text-center"
+                    className={styles.fallback}
                 >
-                    <h2 className="text-destructive mb-2 text-lg font-semibold">
-                        Something went wrong
-                    </h2>
-                    <p className="text-muted-foreground text-sm">
-                        {this.state.error.message}
-                    </p>
+                    <h2 className={styles.title}>Something went wrong</h2>
+                    <p className={styles.message}>{this.state.error.message}</p>
                 </div>
             );
         }

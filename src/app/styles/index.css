@@ -3,6 +3,7 @@
 :root {
     font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
     font-weight: 400;
+    font-synthesis: none;
 
     line-height: 1.5;
 
@@ -11,10 +12,10 @@
     color-scheme: light dark;
 
     background-color: #242424;
+
+    text-rendering: optimizelegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-synthesis: none;
-    text-rendering: optimizelegibility;
 }
 
 *,
@@ -48,14 +49,6 @@ h4,
 h5,
 h6 {
     text-wrap: balance;
-}
-
-.container {
-    inline-size: min(100% - 2rem, 1280px);
-
-    /* width: min(100% - 2rem, 1280px); */
-
-    margin-inline: auto;
 }
 
 img,
