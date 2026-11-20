@@ -7,3 +7,4 @@ public
 .env
 .env.*
 src/app/styles/normalize.css
+package-lock.json
