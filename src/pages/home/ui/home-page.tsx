@@ -1,19 +1,18 @@
 import { useState } from "react";
 
-import "~/app/styles/index.css";
-
 import { CountDownTimer } from "~/shared/ui/countdown-timer/countdown-timer";
+import { Dialog } from "~/shared/ui/dialog";
+import { Marquee } from "~/shared/ui/marquee";
+import { Popover } from "~/shared/ui/popover";
 import { Section } from "~/shared/ui/section";
 import { Switch } from "~/shared/ui/switch";
+import { Tabs } from "~/shared/ui/tabs";
 
-import styles from "./App.module.css";
-import { default as reactLogo, default as viteLogo } from "./assets/react.svg";
-import { Dialog } from "./shared/ui/dialog";
-import { Marquee } from "./shared/ui/marquee";
-import { Popover } from "./shared/ui/popover";
-import { Tabs } from "./shared/ui/tabs";
+import styles from "./home-page.module.css";
 
-function App() {
+import { default as reactLogo, default as viteLogo } from "~/assets/react.svg";
+
+export function HomePage() {
     const [count, setCount] = useState(0);
 
     return (
@@ -163,5 +162,3 @@ function App() {
         </>
     );
 }
-
-export default App;
