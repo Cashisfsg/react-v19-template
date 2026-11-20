@@ -1,0 +1,59 @@
+@layer components {
+    /* The marker takes three declarations, not one: `list-style` answers for
+       Chrome and Firefox, the pseudo-element for Safari and every iOS browser. */
+    .accordion summary {
+        user-select: none;
+
+        list-style: none;
+
+        &::-webkit-details-marker {
+            display: none;
+        }
+    }
+
+    /* `::details-content` is the part to animate, and `interpolate-size` is what
+       lets `auto` be an end state. Both are recent, so the block is asked for;
+       where it is missing the panel simply appears.
+       https://developer.mozilla.org/en-US/docs/Web/CSS/::details-content */
+    @supports selector(::details-content) {
+        .accordion::details-content {
+            block-size: 0;
+
+            transition:
+                block-size 0.3s ease,
+                content-visibility 0.3s ease;
+            transition-behavior: allow-discrete;
+            interpolate-size: allow-keywords;
+        }
+
+        .accordion[open]::details-content {
+            block-size: auto;
+        }
+    }
+
+    /* Shut, it is clipped everywhere: Safari 18.4+ and Firefox have
+       `::details-content` but not `interpolate-size`, so the height snaps to 0
+       while `content-visibility` is held, and the panel would paint over what
+       follows. */
+    .accordion:not([open]) {
+        overflow: clip;
+    }
+
+    /* Open, it is clipped only where the height animates, with room for the
+       focus ring of a control at its edge. Safari has no
+       `overflow-clip-margin`, so there the clip would cut the ring flush. */
+    @supports selector(::details-content) and (interpolate-size: allow-keywords) {
+        .accordion {
+            overflow: clip;
+            overflow-clip-margin: 0.25rem;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        @supports selector(::details-content) {
+            .accordion::details-content {
+                transition: none;
+            }
+        }
+    }
+}
