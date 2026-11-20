@@ -1,54 +1,97 @@
 @layer components {
+    /* Zero specificity throughout, so a caller's own colours, padding and
+       position win without an !important. */
     :where(.popover) {
-        position: absolute;
+        /* Undoing the UA sheet, which per the rendering spec is:
+             position: fixed; inset: 0; width: fit-content;
+             height: fit-content; margin: auto; border: solid;
+             padding: 0.25em; overflow: auto; color: CanvasText;
+             background-color: Canvas;
+           https://html.spec.whatwg.org/multipage/rendering.html
+
+           `inset: 0` with `margin: auto` is what centres a popover in the
+           viewport, so both go — placement belongs to the caller.
+
+           The two colours are the reason this block cannot be skipped. They are
+           set rather than inherited, so without undoing them a panel would come
+           out in the system's own black-on-white however the app is painted.
+           `inherit` puts the text back on the app's cascade; `transparent`
+           leaves the surface to whoever styles it. Stated as the shorthand so a
+           background-image the UA may add later goes with it.
+
+           `border: none` rather than a transparent one: the UA's border is
+           `solid` at medium width, so keeping it transparent would leave 3px of
+           box on every side that nobody asked for. A transparent border earns
+           its place when it reserves room for one that appears on hover or
+           focus — not in a reset.
+
+           Deliberately left alone: `width`/`height: fit-content`, which is the
+           right shape for a panel and overridable; `overflow: auto`, so long
+           content scrolls instead of running off the viewport; and the font,
+           which the spec does not touch and which therefore inherits already. */
         inset: auto;
 
-        margin: 0;
-    }
+        /* `overflow: auto` comes from the UA sheet and is kept, but on its own
+           it does nothing: `height: fit-content` lets the panel grow past the
+           screen and there is then nothing to scroll inside. A modal dialog gets
+           its ceiling for free from `inset: 0` — a fixed box with zero insets
+           cannot exceed the viewport — and a popover cannot, since its
+           placement belongs to the caller. So the ceiling is stated here.
 
-    .popover {
-        --animation-duration: 3s;
+           Scrolling to the end of the panel must not carry on into the page
+           behind it, and a scrollbar is noise on a surface this small. */
+        max-block-size: calc(100svh - 2rem);
+
+        padding: 0;
+        margin: 0;
+
+        overscroll-behavior: none;
 
         color: inherit;
 
+        scrollbar-width: none;
+
+        background: transparent;
+        border: none;
+
         opacity: 0;
 
-        transition-duration: var(--animation-duration);
+        transition-duration: 0.15s;
+        transition-property: opacity, display, overlay;
+
+        /* Without this the panel would fade out and then still be there:
+           `display` and `overlay` are discrete properties, so they flip at the
+           start of the transition unless it is allowed to hold them to the end. */
         transition-behavior: allow-discrete;
 
-        will-change: opacity;
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
-    .popover:popover-open {
+    /* `Activity` hides the contents of a closed panel with an inline `display:
+       none` on each child, at the moment it closes. Held to the end of the
+       panel's own transition, so a sheet slides away with what is in it rather
+       than as an empty strip. */
+    :where(.popover) > * {
+        transition-duration: inherit;
+        transition-property: display;
+        transition-behavior: allow-discrete;
+    }
+
+    :where(.popover:popover-open) {
         opacity: 1;
 
+        /* The opening frame needs a value to move from, and an element entering
+           the top layer has no previous style to inherit one from. */
         @starting-style {
             opacity: 0;
         }
     }
 
-    .popover::backdrop {
-        background: rgb(0 0 0 / 0%);
-
-        opacity: 0;
-
-        backdrop-filter: blur(8px);
-
-        transition-duration: inherit;
-
-        /* transition: all 5s ease-in-out; */
-
-        transition-property: background, opacity, display, overlay;
-        transition-behavior: allow-discrete;
-    }
-
-    .popover:popover-open::backdrop {
-        background: rgb(0 0 0 / 25%);
-
-        opacity: 1;
-
-        @starting-style {
-            opacity: 0;
+    @media (prefers-reduced-motion: reduce) {
+        :where(.popover) {
+            transition-duration: 0s;
         }
     }
 }

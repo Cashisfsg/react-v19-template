@@ -140,7 +140,7 @@ export function HomePage() {
 
             <Popover.Root>
                 <Popover.Trigger>popover trigger</Popover.Trigger>
-                <Popover.Content style={{ margin: "0", inset: "auto" }}>
+                <Popover.Content>
                     Popover content
                     <Popover.Close>Close popover</Popover.Close>
                 </Popover.Content>
