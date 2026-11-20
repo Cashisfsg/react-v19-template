@@ -1,0 +1,125 @@
+@layer components {
+    /* Zero specificity, so a caller's own look wins. Colours come from
+       --sortable-list-border, --sortable-list-accent and
+       --sortable-list-focus-ring. */
+    :where(.list) {
+        display: grid;
+
+        gap: 0.25rem;
+
+        padding: 0;
+        margin: 0;
+
+        list-style: none;
+    }
+
+    :where(.item) {
+        display: grid;
+
+        grid-template-columns: auto minmax(0, 1fr) auto;
+
+        gap: 0.5rem;
+
+        align-items: center;
+
+        padding: 0.5rem 0.75rem;
+
+        border: 1px solid
+            var(
+                --sortable-list-border,
+                color-mix(in srgb, currentcolor 20%, transparent)
+            );
+        border-radius: 0.5rem;
+
+        transition: opacity 0.15s ease;
+    }
+
+    :where(.item[data-dragging]) {
+        opacity: 0.4;
+    }
+
+    /* Where the drop will land: a line on the side of the row it goes. */
+    :where(.item[data-drop="before"]) {
+        box-shadow: 0 -3px 0 0 var(--sortable-list-accent, Highlight);
+    }
+
+    :where(.item[data-drop="after"]) {
+        box-shadow: 0 3px 0 0 var(--sortable-list-accent, Highlight);
+    }
+
+    :where(.handle) {
+        padding-inline: 0.25rem;
+
+        font-size: 1.25rem;
+
+        line-height: 1;
+
+        cursor: grab;
+        user-select: none;
+
+        opacity: 0.6;
+
+        &:active {
+            cursor: grabbing;
+        }
+    }
+
+    :where(.controls) {
+        display: flex;
+
+        gap: 0.25rem;
+    }
+
+    :where(.move) {
+        display: grid;
+
+        place-items: center;
+
+        padding: 0.375rem 0.625rem;
+
+        font: inherit;
+
+        color: inherit;
+
+        cursor: pointer;
+
+        background: none;
+        border: 1px solid
+            var(
+                --sortable-list-border,
+                color-mix(in srgb, currentcolor 20%, transparent)
+            );
+        border-radius: 0.375rem;
+
+        &:focus-visible {
+            outline: 2px solid var(--sortable-list-focus-ring, Highlight);
+            outline-offset: 2px;
+        }
+
+        &[aria-disabled="true"] {
+            cursor: not-allowed;
+
+            opacity: 0.4;
+        }
+    }
+
+    /* Read out, never seen. */
+    :where(.status) {
+        position: absolute;
+
+        inline-size: 1px;
+        block-size: 1px;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        clip-path: inset(50%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :where(.item) {
+            transition: none;
+        }
+    }
+}
