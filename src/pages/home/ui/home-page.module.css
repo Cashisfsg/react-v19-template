@@ -1,92 +1,139 @@
 @layer layouts {
-    .logo {
-        height: 6em;
+    .announcement {
+        inline-size: 100%;
 
-        padding: 1.5em;
+        padding-block: 0.5rem;
 
-        transition: filter 300ms;
+        font-size: 0.875rem;
 
-        will-change: filter;
+        color: Canvas;
+
+        background: CanvasText;
     }
 
-    .logo:hover {
-        filter: drop-shadow(0 0 2em #646cffaa);
+    .header,
+    .main {
+        inline-size: min(100% - 2rem, 1280px);
     }
 
-    .logo.react:hover {
-        filter: drop-shadow(0 0 2em #61dafbaa);
-    }
+    .header {
+        display: grid;
 
-    @keyframes logo-spin {
-        from {
-            transform: rotate(0deg);
+        gap: 1rem;
+
+        justify-items: start;
+
+        padding-block: 3rem 1.5rem;
+
+        & h1 {
+            margin: 0;
         }
+    }
 
-        to {
-            transform: rotate(360deg);
+    .lead {
+        max-inline-size: 60ch;
+
+        margin: 0;
+
+        font-size: 1.125rem;
+
+        color: color-mix(in srgb, currentcolor 70%, transparent);
+    }
+
+    .navigation ul {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 0.5rem;
+
+        padding: 0;
+        margin: 0;
+
+        list-style: none;
+    }
+
+    .navigation a {
+        display: block;
+
+        padding: 0.375rem 0.875rem;
+
+        border: 1px solid color-mix(in srgb, currentcolor 30%, transparent);
+        border-radius: 100vw;
+
+        &:focus-visible {
+            outline: 2px solid currentcolor;
+            outline-offset: 2px;
         }
     }
 
-    @media (prefers-reduced-motion: no-preference) {
-        a:nth-of-type(2) .logo {
-            animation: logo-spin infinite 20s linear;
-        }
+    .main {
+        display: grid;
+
+        gap: 3rem;
+
+        padding-block-end: 4rem;
+    }
+
+    .group {
+        display: grid;
+
+        gap: 0.5rem;
+
+        /* Air above a group the contents link jumps to. */
+        scroll-margin-block-start: 1rem;
+    }
+
+    .group-title {
+        margin: 0;
+
+        font-size: 1.75rem;
+    }
+
+    .description {
+        margin: 0;
+
+        color: color-mix(in srgb, currentcolor 70%, transparent);
+    }
+
+    .cards {
+        display: grid;
+
+        grid-template-columns: repeat(auto-fill, minmax(min(100%, 22rem), 1fr));
+
+        gap: 1rem;
+
+        padding: 0;
+        margin: 0;
+        margin-block-start: 0.5rem;
+
+        list-style: none;
     }
 
     .card {
-        padding: 2em;
+        min-inline-size: 0;
+
+        padding: 1.25rem;
+
+        overflow-wrap: anywhere;
+
+        border: 1px solid color-mix(in srgb, currentcolor 15%, transparent);
+        border-radius: 0.75rem;
     }
 
-    .read-the-docs {
-        color: #888;
-    }
+    .own-card {
+        display: flex;
 
-    .navigation {
-        & ul {
-            display: grid;
+        flex-direction: column;
 
-            grid-auto-columns: auto;
-            grid-auto-flow: column;
+        gap: 0.5rem;
 
-            column-gap: 1rem;
+        text-align: start;
 
-            list-style-type: none;
+        & h3 {
+            margin: 0;
 
-            & li a {
-                display: grid;
-
-                grid-template-columns: max-content 0fr;
-
-                column-gap: 0.5rem;
-
-                align-items: center;
-
-                transition: grid-template-columns 0.5s ease;
-
-                & span {
-                    overflow: hidden;
-
-                    white-space: nowrap;
-                }
-
-                /* Активная ссылка по умолчанию */
-                &[aria-current="page"] {
-                    grid-template-columns: max-content 1fr;
-
-                    color: blue;
-                }
-
-                /* Любая ссылка на hover раскрывается */
-                &:hover {
-                    grid-template-columns: max-content 1fr;
-                }
-            }
-
-            /* Если в списке есть hover на другой ссылке,
-       то активная сжимается */
-            &:has(a:not([aria-current="page"]):hover) a[aria-current="page"] {
-                grid-template-columns: max-content 0fr;
-            }
+            font-size: 1rem;
         }
     }
 }

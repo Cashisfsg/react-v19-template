@@ -1,164 +1,188 @@
-import { useState } from "react";
+import { useId } from "react";
 
-import { CountDownTimer } from "~/shared/ui/countdown-timer/countdown-timer";
-import { Dialog } from "~/shared/ui/dialog";
+import { AccordionExample } from "~/shared/ui/accordion/accordion.example";
+import { AnchorExample } from "~/shared/ui/anchor/anchor.example";
+import { ActionButtonExample } from "~/shared/ui/button/action-button.example";
+import { ButtonExample } from "~/shared/ui/button/button.example";
+import { CountDownTimer } from "~/shared/ui/countdown-timer";
+import { DialogExample } from "~/shared/ui/dialog/dialog.example";
+import { ErrorBoundaryExample } from "~/shared/ui/error-boundary/error-boundary.example";
+import { Input } from "~/shared/ui/input";
+import { LinkExample } from "~/shared/ui/link/link.example";
 import { Marquee } from "~/shared/ui/marquee";
-import { Popover } from "~/shared/ui/popover";
+import { MarqueeExample } from "~/shared/ui/marquee/marquee.example";
+import { MenuExample } from "~/shared/ui/menu/menu.example";
+import { PopoverExample } from "~/shared/ui/popover/popover.example";
+import { PortalExample } from "~/shared/ui/portal/portal.example";
+import { ProgressExample } from "~/shared/ui/progress/progress.example";
 import { Section } from "~/shared/ui/section";
-import { Switch } from "~/shared/ui/switch";
-import { Tabs } from "~/shared/ui/tabs";
+import { SectionExample } from "~/shared/ui/section/section.example";
+import { SwitchExample } from "~/shared/ui/switch/switch.example";
+import { TabsExample } from "~/shared/ui/tabs/tabs.example";
+import { TooltipExample } from "~/shared/ui/tooltip/tooltip.example";
 
 import styles from "./home-page.module.css";
 
-import { default as reactLogo, default as viteLogo } from "~/assets/react.svg";
-
-export function HomePage() {
-    const [count, setCount] = useState(0);
+const InputCard: React.FC = () => {
+    const id = useId();
 
     return (
+        <section className={styles["own-card"]}>
+            <h3>Input example</h3>
+            <label htmlFor={id}>Email</label>
+            <Input
+                id={id}
+                type="email"
+                placeholder="name@example.com"
+                required
+            />
+        </section>
+    );
+};
+
+const TimerCard: React.FC = () => (
+    <section className={styles["own-card"]}>
+        <h3>Countdown timer</h3>
+        <CountDownTimer />
+    </section>
+);
+
+interface Example {
+    /* A key of its own: a function's name does not survive minification. */
+    key: string;
+    Component: React.FC;
+}
+
+interface Group {
+    id: string;
+    title: string;
+    description: string;
+    examples: readonly Example[];
+}
+
+const GROUPS: readonly Group[] = [
+    {
+        id: "actions",
+        title: "Actions",
+        description: "Buttons, a menu of commands and the hint beside them.",
+        examples: [
+            { key: "button", Component: ButtonExample },
+            { key: "action-button", Component: ActionButtonExample },
+            { key: "menu", Component: MenuExample },
+            { key: "tooltip", Component: TooltipExample }
+        ]
+    },
+    {
+        id: "overlays",
+        title: "Overlays",
+        description:
+            "Panels in the top layer: dialogs, popovers, anchoring and portals.",
+        examples: [
+            { key: "dialog", Component: DialogExample },
+            { key: "popover", Component: PopoverExample },
+            { key: "anchor", Component: AnchorExample },
+            { key: "portal", Component: PortalExample }
+        ]
+    },
+    {
+        id: "content",
+        title: "Content",
+        description: "Ways to arrange, reveal and name what is on the page.",
+        examples: [
+            { key: "tabs", Component: TabsExample },
+            { key: "accordion", Component: AccordionExample },
+            { key: "section", Component: SectionExample },
+            { key: "marquee", Component: MarqueeExample },
+            { key: "link", Component: LinkExample }
+        ]
+    },
+    {
+        id: "forms",
+        title: "Forms",
+        description: "Controls a person types into or toggles.",
+        examples: [
+            { key: "switch", Component: SwitchExample },
+            { key: "input", Component: InputCard }
+        ]
+    },
+    {
+        id: "feedback",
+        title: "Feedback",
+        description: "What the page says while it works, waits or breaks.",
+        examples: [
+            { key: "progress", Component: ProgressExample },
+            { key: "timer", Component: TimerCard },
+            { key: "error-boundary", Component: ErrorBoundaryExample }
+        ]
+    }
+];
+
+export function HomePage() {
+    return (
         <>
-            <Marquee.Root aria-label="Example marquee">
+            <Marquee.Root
+                aria-label="What is inside"
+                className={styles.announcement}
+            >
                 <Marquee.List>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
-                    <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
+                    <Marquee.Item>React 19 with React Router SSR</Marquee.Item>
+                    <Marquee.Item>
+                        Popover API and anchor positioning
+                    </Marquee.Item>
+                    <Marquee.Item>A menu on aria-activedescendant</Marquee.Item>
+                    <Marquee.Item>CSS Modules in cascade layers</Marquee.Item>
+                    <Marquee.Item>No runtime UI dependencies</Marquee.Item>
                 </Marquee.List>
             </Marquee.Root>
 
-            <nav className={styles.navigation}>
-                <ul>
-                    <li>
-                        <a href="#link-1">
-                            <svg
-                                stroke="currentColor"
-                                fill="currentColor"
-                                strokeWidth="0"
-                                viewBox="0 0 576 512"
-                                height="1rem"
-                                width="1rem"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path>
-                            </svg>
-                            <span>Link #1</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a
-                            href="#link-2"
-                            aria-current="page"
-                        >
-                            <svg
-                                stroke="currentColor"
-                                fill="currentColor"
-                                strokeWidth="0"
-                                viewBox="0 0 576 512"
-                                height="1rem"
-                                width="1rem"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path>
-                            </svg>
-                            <span>Link #2</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#link-3">
-                            <svg
-                                stroke="currentColor"
-                                fill="currentColor"
-                                strokeWidth="0"
-                                viewBox="0 0 576 512"
-                                height="1rem"
-                                width="1rem"
-                                xmlns="http://www.w3.org/2000/svg"
-                            >
-                                <path d="M280.37 148.26L96 300.11V464a16 16 0 0 0 16 16l112.06-.29a16 16 0 0 0 15.92-16V368a16 16 0 0 1 16-16h64a16 16 0 0 1 16 16v95.64a16 16 0 0 0 16 16.05L464 480a16 16 0 0 0 16-16V300L295.67 148.26a12.19 12.19 0 0 0-15.3 0zM571.6 251.47L488 182.56V44.05a12 12 0 0 0-12-12h-56a12 12 0 0 0-12 12v72.61L318.47 43a48 48 0 0 0-61 0L4.34 251.47a12 12 0 0 0-1.6 16.9l25.5 31A12 12 0 0 0 45.15 301l235.22-193.74a12.19 12.19 0 0 1 15.3 0L530.9 301a12 12 0 0 0 16.9-1.6l25.5-31a12 12 0 0 0-1.7-16.93z"></path>
-                            </svg>
-                            <span>Link #3</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-            <div>
-                <a
-                    href="https://vite.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <img
-                        src={viteLogo}
-                        className={styles.logo}
-                        alt="Vite logo"
-                    />
-                </a>
-                <a
-                    href="https://react.dev"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    <img
-                        src={reactLogo}
-                        className={`${styles.logo} ${styles.react}`}
-                        alt="React logo"
-                    />
-                </a>
-            </div>
-            <h1>Vite + React</h1>
-            <div className={styles.card}>
-                <button
-                    onClick={() => {
-                        setCount(count => count + 1);
-                    }}
-                >
-                    count is {count}
-                </button>
-                <p>
-                    Edit <code>src/App.tsx</code> and save to test HMR
+            <header className={styles.header}>
+                <h1>React v19 template</h1>
+                <p className={styles.lead}>
+                    Every shared component, live. Each example lists the checks
+                    only a person can make in its doc comment.
                 </p>
-                <Switch aria-label="Example switch" />
-            </div>
 
-            <p className={styles["read-the-docs"]}>
-                Click on the Vite and React logos to learn more
-            </p>
-            <Dialog.Root>
-                <Dialog.Trigger>Dialog trigger</Dialog.Trigger>
-                <Dialog.Content>Dialog content</Dialog.Content>
-            </Dialog.Root>
+                <nav
+                    aria-label="Component groups"
+                    className={styles.navigation}
+                >
+                    <ul>
+                        {GROUPS.map(group => (
+                            <li key={group.id}>
+                                <a href={`#${group.id}`}>{group.title}</a>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            </header>
 
-            <Section.Root>
-                <Section.Label>Label #1</Section.Label>
-                <Section.Label>Label #2</Section.Label>
-                <Section.Label>Label #3</Section.Label>
+            <main className={styles.main}>
+                {GROUPS.map(group => (
+                    <Section.Root
+                        key={group.id}
+                        id={group.id}
+                        className={styles.group}
+                    >
+                        <Section.Label className={styles["group-title"]}>
+                            {group.title}
+                        </Section.Label>
+                        <Section.Description className={styles.description}>
+                            {group.description}
+                        </Section.Description>
 
-                {/* <Section.Label>Label #1</Section.Label> */}
-            </Section.Root>
-
-            <Popover.Root>
-                <Popover.Trigger>popover trigger</Popover.Trigger>
-                <Popover.Content>
-                    Popover content
-                    <Popover.Close>Close popover</Popover.Close>
-                </Popover.Content>
-            </Popover.Root>
-
-            <Tabs.Root defaultValue="1">
-                <Tabs.List>
-                    <Tabs.Trigger value="1">Tab 1</Tabs.Trigger>
-                    <Tabs.Trigger value="2">Tab 2</Tabs.Trigger>
-                    <Tabs.Trigger value="3">Tab 3</Tabs.Trigger>
-                </Tabs.List>
-
-                <Tabs.Content value="1">Content 1</Tabs.Content>
-                <Tabs.Content value="2">Content 2</Tabs.Content>
-                <Tabs.Content value="3">Content 3</Tabs.Content>
-            </Tabs.Root>
-
-            <CountDownTimer />
+                        <ul className={styles.cards}>
+                            {group.examples.map(({ key, Component }) => (
+                                <li
+                                    key={key}
+                                    className={styles.card}
+                                >
+                                    <Component />
+                                </li>
+                            ))}
+                        </ul>
+                    </Section.Root>
+                ))}
+            </main>
         </>
     );
 }
