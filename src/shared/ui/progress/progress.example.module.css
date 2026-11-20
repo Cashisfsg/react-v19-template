@@ -1,0 +1,24 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.5rem;
+
+        max-inline-size: 32rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .accent {
+        --progress-fill: #87adf0;
+        --progress-size: 6px;
+    }
+}
