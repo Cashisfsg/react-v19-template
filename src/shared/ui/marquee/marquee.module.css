@@ -1,38 +1,69 @@
 @layer components {
-    :where(.marquee) {
-        --gap: 1rem;
+    .marquee {
+        --marquee-gap: 1rem;
+        --marquee-duration: 20s;
+        --marquee-direction: -1;
 
         display: flex;
 
-        column-gap: var(--gap);
+        column-gap: var(--marquee-gap);
 
         overflow: hidden;
 
         user-select: none;
+
+        &:dir(rtl) {
+            --marquee-direction: 1;
+        }
     }
 
-    :where(.marquee-list) {
+    .marquee-list {
         display: flex;
 
         flex-shrink: 0;
 
-        column-gap: var(--gap);
+        column-gap: var(--marquee-gap);
 
         align-items: center;
         justify-content: space-around;
 
-        min-width: 100%;
+        min-inline-size: 100%;
 
         padding: 0;
+        margin: 0;
 
         list-style-type: none;
 
-        animation: scroll 20s linear infinite;
+        animation: scroll var(--marquee-duration) linear infinite;
+    }
+
+    /* Hover and focus pause it as well, so a link can be read and reached, but
+       they are a courtesy: the `paused` control is what WCAG 2.2.2 asks for. */
+    .marquee:is([data-paused], :hover, :focus-within) > .marquee-list {
+        animation-play-state: paused;
+    }
+
+    /* Reduced motion: the strip stands still and scrolls by hand instead, so
+       every item stays reachable. The copy only existed for the loop. */
+    @media (prefers-reduced-motion: reduce) {
+        .marquee {
+            overflow-x: auto;
+        }
+
+        .marquee-list {
+            animation: none;
+        }
+
+        .marquee-list[inert] {
+            display: none;
+        }
     }
 
     @keyframes scroll {
         to {
-            transform: translateX(calc(-100% - var(--gap)));
+            translate: calc(
+                (100% + var(--marquee-gap)) * var(--marquee-direction)
+            );
         }
     }
 }

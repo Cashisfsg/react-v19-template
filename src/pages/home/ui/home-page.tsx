@@ -17,7 +17,7 @@ export function HomePage() {
 
     return (
         <>
-            <Marquee.Root>
+            <Marquee.Root aria-label="Example marquee">
                 <Marquee.List>
                     <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
                     <Marquee.Item>Lorem ipsum dolor sit amet.</Marquee.Item>
