@@ -17,6 +17,7 @@
         flex-shrink: 0;
 
         column-gap: var(--gap);
+
         align-items: center;
         justify-content: space-around;
 
