@@ -43,7 +43,7 @@ export default tseslint.config([
             ...tseslint.configs.recommendedTypeChecked,
             ...tseslint.configs.strictTypeChecked,
 
-            reactHooks.configs["recommended-latest"],
+            reactHooks.configs.flat["recommended-latest"],
             reactRefresh.configs.vite,
             importPlugin.flatConfigs.recommended,
             react.configs.flat.recommended,
