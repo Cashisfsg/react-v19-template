@@ -1,6 +1,6 @@
 import { createPortal } from "react-dom";
 
-import { useIsHydrated } from "~/shared/lib/hooks/use-is-hydrated";
+import { useHydrationStatus } from "~/shared/lib/hooks/use-hydration-status";
 
 export interface PortalProps extends React.PropsWithChildren {
     /** Where the children go. Defaults to `document.body`. */
@@ -18,7 +18,7 @@ export interface PortalProps extends React.PropsWithChildren {
  * layer, above every z-index and outside any `overflow`.
  */
 export const Portal: React.FC<PortalProps> = ({ container, children }) => {
-    const isHydrated = useIsHydrated();
+    const isHydrated = useHydrationStatus();
 
     if (!isHydrated) return null;
 

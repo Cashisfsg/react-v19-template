@@ -16,5 +16,12 @@ const getServerSnapshot = () => false;
  * on the client, after a navigation, gets `true` straight away; `useEffect`
  * with `useState` would render once more with `false` there too.
  */
-export const useIsHydrated = () =>
-    useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+export const useHydrationStatus = () => {
+    const isHydrated = useSyncExternalStore(
+        subscribe,
+        getSnapshot,
+        getServerSnapshot
+    );
+
+    return isHydrated;
+};
