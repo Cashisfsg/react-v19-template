@@ -1,0 +1,103 @@
+@layer components {
+    /* Unlike the rest of `shared/ui`, these rules carry real specificity. Where
+       a panel goes is this slice's call once `data-anchor` is set, and a
+       caller's own zero-specificity base — a bottom sheet's `inset` and
+       `margin` — must not undo it. Everything else about the panel stays the
+       caller's. */
+    .target {
+        anchor-name: var(--anchor-name);
+    }
+
+    /* Both paths. The fallback writes its coordinates into `inset` on the
+       element, and keeps its own gap out of the margin. */
+    .positioned[data-anchor] {
+        inset: auto;
+
+        margin: 0;
+    }
+
+    .positioned[data-anchor="native"] {
+        position-anchor: var(--anchor-name);
+    }
+
+    /* The fallbacks mirror `place.ts`: the other side when there is no room,
+       the other way when it would run off the screen, and failing all that on
+       its own side at whatever height is left. */
+    .positioned[data-anchor="native"][data-side="block-end"] {
+        margin-block-start: 0.25rem;
+    }
+
+    .positioned[data-anchor="native"][data-side="block-start"] {
+        margin-block-end: 0.25rem;
+    }
+
+    .positioned[data-anchor="native"][data-side="block-end"][data-align="end"] {
+        position-area: block-end span-inline-start;
+        position-try-fallbacks:
+            flip-block,
+            flip-inline,
+            flip-block flip-inline,
+            --anchor-fit-block-end-end;
+    }
+
+    .positioned[data-anchor="native"][data-side="block-end"][data-align="start"] {
+        position-area: block-end span-inline-end;
+        position-try-fallbacks:
+            flip-block,
+            flip-inline,
+            flip-block flip-inline,
+            --anchor-fit-block-end-start;
+    }
+
+    .positioned[data-anchor="native"][data-side="block-start"][data-align="end"] {
+        position-area: block-start span-inline-start;
+        position-try-fallbacks:
+            flip-block,
+            flip-inline,
+            flip-block flip-inline,
+            --anchor-fit-block-start-end;
+    }
+
+    .positioned[data-anchor="native"][data-side="block-start"][data-align="start"] {
+        position-area: block-start span-inline-end;
+        position-try-fallbacks:
+            flip-block,
+            flip-inline,
+            flip-block flip-inline,
+            --anchor-fit-block-start-start;
+    }
+}
+
+/* The last resorts. A dashed ident is global under CSS modules, hence the names
+   that say whose they are. */
+@position-try --anchor-fit-block-end-end {
+    max-block-size: calc(100% - 0.5rem);
+
+    margin-block-start: 0.25rem;
+
+    position-area: block-end span-inline-start;
+}
+
+@position-try --anchor-fit-block-end-start {
+    max-block-size: calc(100% - 0.5rem);
+
+    margin-block-start: 0.25rem;
+
+    position-area: block-end span-inline-end;
+}
+
+@position-try --anchor-fit-block-start-end {
+    max-block-size: calc(100% - 0.5rem);
+
+    margin-block-end: 0.25rem;
+
+    position-area: block-start span-inline-start;
+}
+
+@position-try --anchor-fit-block-start-start {
+    max-block-size: calc(100% - 0.5rem);
+
+    margin-block-end: 0.25rem;
+
+    position-area: block-start span-inline-end;
+}
