@@ -1,0 +1,86 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.5rem;
+
+        max-inline-size: 32rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .label {
+        margin: 0.75rem 0 0;
+
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        opacity: 0.6;
+    }
+
+    .item {
+        border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+        border-radius: 0.5rem;
+    }
+
+    .trigger {
+        display: flex;
+
+        gap: 0.5rem;
+
+        align-items: center;
+        justify-content: space-between;
+
+        padding: 0.75rem 1rem;
+
+        cursor: pointer;
+
+        &::after {
+            inline-size: 0.5rem;
+            block-size: 0.5rem;
+
+            content: "";
+
+            border-block-end: 2px solid currentcolor;
+            border-inline-end: 2px solid currentcolor;
+
+            rotate: 45deg;
+
+            transition: rotate 0.3s ease;
+        }
+
+        [open] > &::after {
+            rotate: -135deg;
+        }
+
+        &:focus-visible {
+            outline: 2px solid currentcolor;
+            outline-offset: -2px;
+        }
+    }
+
+    .content {
+        padding: 0 1rem 0.75rem;
+        margin: 0;
+    }
+
+    ul.content {
+        padding-inline-start: 2rem;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .trigger::after {
+            transition: none;
+        }
+    }
+}
