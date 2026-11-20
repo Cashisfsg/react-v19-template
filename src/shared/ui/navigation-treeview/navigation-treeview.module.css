@@ -1,0 +1,95 @@
+@layer components {
+    /* Zero specificity, so a caller's own look wins. Colours come from
+       --navigation-treeview-current, --navigation-treeview-hover and
+       --navigation-treeview-focus-ring. */
+    :where(.tree),
+    :where(.group) {
+        padding: 0;
+        margin: 0;
+
+        list-style: none;
+    }
+
+    /* A step in per level, so the depth reads without lines. */
+    :where(.group) {
+        padding-inline-start: 1.25rem;
+    }
+
+    :where(.item) {
+        display: grid;
+
+        grid-template-columns: 1rem minmax(0, 1fr);
+
+        gap: 0.375rem;
+
+        align-items: center;
+
+        padding: 0.375rem 0.5rem;
+
+        color: inherit;
+
+        text-decoration: none;
+
+        border-radius: 0.375rem;
+
+        &:hover {
+            background: var(
+                --navigation-treeview-hover,
+                color-mix(in srgb, currentcolor 8%, transparent)
+            );
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--navigation-treeview-focus-ring, Highlight);
+            outline-offset: -2px;
+        }
+
+        &[aria-current="page"] {
+            font-weight: 600;
+
+            color: var(--navigation-treeview-current, LinkText);
+        }
+    }
+
+    /* Holds the chevron's column on a link with no section, so the words
+       line up. */
+    :where(.spacer) {
+        inline-size: 1rem;
+    }
+
+    :where(.label) {
+        overflow-wrap: anywhere;
+    }
+
+    /* A chevron drawn with two borders, turned down when the section is
+       open. In `currentcolor`, so it follows the link. */
+    :where(.toggle) {
+        justify-self: center;
+
+        inline-size: 0.4rem;
+        block-size: 0.4rem;
+
+        cursor: pointer;
+
+        border-block-start: 2px solid currentcolor;
+        border-inline-end: 2px solid currentcolor;
+
+        rotate: 45deg;
+
+        transition: rotate 0.15s ease;
+    }
+
+    :where(.toggle:dir(rtl)) {
+        rotate: -45deg;
+    }
+
+    :where(.item[aria-expanded="true"] > .toggle) {
+        rotate: 135deg;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :where(.toggle) {
+            transition: none;
+        }
+    }
+}

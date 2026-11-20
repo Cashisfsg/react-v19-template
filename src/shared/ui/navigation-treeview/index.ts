@@ -1,1 +1,1 @@
-export * as Tree from "./navigation-treeview";
+export * as NavigationTreeview from "./navigation-treeview";

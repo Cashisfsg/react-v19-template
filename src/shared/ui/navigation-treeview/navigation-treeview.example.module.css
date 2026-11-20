@@ -1,0 +1,17 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.75rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+}

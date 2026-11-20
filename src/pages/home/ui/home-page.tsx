@@ -14,6 +14,7 @@ import { SortableListExample } from "~/shared/ui/list/sortable-list/sortable-lis
 import { Marquee } from "~/shared/ui/marquee";
 import { MarqueeExample } from "~/shared/ui/marquee/marquee.example";
 import { MenuExample } from "~/shared/ui/menu/menu.example";
+import { NavigationTreeviewExample } from "~/shared/ui/navigation-treeview/navigation-treeview.example";
 import { PopoverExample } from "~/shared/ui/popover/popover.example";
 import { PortalExample } from "~/shared/ui/portal/portal.example";
 import { ProgressExample } from "~/shared/ui/progress/progress.example";
@@ -95,7 +96,11 @@ const GROUPS: readonly Group[] = [
             { key: "accordion", Component: AccordionExample },
             { key: "section", Component: SectionExample },
             { key: "marquee", Component: MarqueeExample },
-            { key: "link", Component: LinkExample }
+            { key: "link", Component: LinkExample },
+            {
+                key: "navigation-treeview",
+                Component: NavigationTreeviewExample
+            }
         ]
     },
     {

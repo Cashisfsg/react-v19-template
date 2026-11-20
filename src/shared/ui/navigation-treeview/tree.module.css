@@ -1,7 +1,0 @@
-.group {
-    display: none;
-}
-
-.treeitem[aria-expanded="true"] > .group {
-    display: block;
-}
