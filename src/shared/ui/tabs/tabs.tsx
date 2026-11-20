@@ -107,9 +107,11 @@ export const Trigger: React.FC<TriggerProps> = ({
                 return;
         }
 
+        const newTab = tabs[newIndex];
+        if (newTab === undefined) return;
+
         event.preventDefault();
         event.stopPropagation();
-        const newTab = tabs[newIndex];
         newTab.focus();
         newTab.click();
     };
