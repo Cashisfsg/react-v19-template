@@ -35,9 +35,10 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editors. Only the recommended VS Code extensions are shared.
+# Editors. The VS Code settings and recommended extensions are shared.
 .vscode/*
 !.vscode/extensions.json
+!.vscode/settings.json
 .idea/
 *.code-workspace
 *.sw?
