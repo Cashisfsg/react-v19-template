@@ -29,11 +29,10 @@ Root.displayName = "Popover.Root";
 
 // Portal.displayName = "Popover.Portal";
 
-interface PopoverTriggerProps
-    extends Omit<
-        React.ComponentPropsWithoutRef<"button">,
-        "popoverTarget" | "id"
-    > {}
+interface PopoverTriggerProps extends Omit<
+    React.ComponentPropsWithoutRef<"button">,
+    "popoverTarget" | "id"
+> {}
 
 export const Trigger: React.FC<PopoverTriggerProps> = ({
     type = "button",
@@ -84,11 +83,10 @@ export const Content = <E extends React.ElementType = "div">({
     );
 };
 
-interface PopoverCloseProps
-    extends Omit<
-        React.ComponentPropsWithoutRef<"button">,
-        "popoverTarget" | "popoverTargetAction"
-    > {}
+interface PopoverCloseProps extends Omit<
+    React.ComponentPropsWithoutRef<"button">,
+    "popoverTarget" | "popoverTargetAction"
+> {}
 
 export const Close: React.FC<PopoverCloseProps> = ({
     type = "button",

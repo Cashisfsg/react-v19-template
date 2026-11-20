@@ -72,11 +72,7 @@ type SelfInline =
 type GenericLogical = "start" | "center" | "end" | "span-start" | "span-end";
 
 type SelfGenericLogical =
-    | "self-start"
-    | "center"
-    | "self-end"
-    | "span-self-start"
-    | "span-self-end";
+    "self-start" | "center" | "self-end" | "span-self-start" | "span-self-end";
 
 /////////////////////
 // span-all (valid with all types)
@@ -87,18 +83,10 @@ type SpanAll = "span-all";
 // Coordinate keywords shorthand (x/y synonyms sometimes used in MDN)
 /////////////////////
 type CoordinateX =
-    | "x-start"
-    | "center"
-    | "x-end"
-    | "span-x-start"
-    | "span-x-end";
+    "x-start" | "center" | "x-end" | "span-x-start" | "span-x-end";
 
 type CoordinateY =
-    | "y-start"
-    | "center"
-    | "y-end"
-    | "span-y-start"
-    | "span-y-end";
+    "y-start" | "center" | "y-end" | "span-y-start" | "span-y-end";
 
 /////////////////////
 // SINGLE value (any single keyword that is valid alone)

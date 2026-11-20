@@ -58,11 +58,10 @@ export const List: React.FC<ListProps> = ({
 
 List.displayName = "Tabs.List";
 
-interface TriggerProps
-    extends Omit<
-        React.ComponentProps<"button">,
-        "id" | "role" | "type" | "aria-selected" | "aria-controls" | "tabIndex"
-    > {
+interface TriggerProps extends Omit<
+    React.ComponentProps<"button">,
+    "id" | "role" | "type" | "aria-selected" | "aria-controls" | "tabIndex"
+> {
     value: string;
 }
 
@@ -139,11 +138,10 @@ export const Trigger: React.FC<TriggerProps> = ({
 
 Trigger.displayName = "Tabs.Trigger";
 
-interface ContentProps
-    extends Omit<
-        React.ComponentProps<"div">,
-        "id" | "role" | "aria-labelledby" | "tabIndex"
-    > {
+interface ContentProps extends Omit<
+    React.ComponentProps<"div">,
+    "id" | "role" | "aria-labelledby" | "tabIndex"
+> {
     value: string;
 }
 

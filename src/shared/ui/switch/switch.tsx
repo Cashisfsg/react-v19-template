@@ -1,6 +1,8 @@
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
-interface SwitchProps
-    extends Omit<React.ComponentPropsWithRef<"button">, "type" | "role"> {}
+interface SwitchProps extends Omit<
+    React.ComponentPropsWithRef<"button">,
+    "type" | "role"
+> {}
 
 export const Switch: React.FC<SwitchProps> = ({
     "aria-checked": ariaChecked,

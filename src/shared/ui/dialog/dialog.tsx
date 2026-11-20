@@ -28,11 +28,10 @@ export const Root: React.FC<RootProps> = ({ children }) => {
 
 Root.displayName = "Dialog.Root";
 
-interface TriggerProps
-    extends Omit<
-        React.ComponentProps<"button">,
-        "aria-expanded" | "aria-haspopup" | "aria-controls"
-    > {}
+interface TriggerProps extends Omit<
+    React.ComponentProps<"button">,
+    "aria-expanded" | "aria-haspopup" | "aria-controls"
+> {}
 
 export const Trigger: React.FC<TriggerProps> = ({ onClick, ...props }) => {
     const { dialogId, dialogRef, triggerRef } = useDialogContext();
@@ -116,11 +115,10 @@ export const Content: React.FC<ContentProps> = ({
 
 Content.displayName = "Dialog.Content";
 
-interface CloseProps
-    extends Omit<
-        React.ComponentProps<"button">,
-        "aria-haspopup" | "aria-controls"
-    > {}
+interface CloseProps extends Omit<
+    React.ComponentProps<"button">,
+    "aria-haspopup" | "aria-controls"
+> {}
 
 export const Close: React.FC<CloseProps> = ({ onClick, ...props }) => {
     const { dialogRef, triggerRef } = useDialogContext();

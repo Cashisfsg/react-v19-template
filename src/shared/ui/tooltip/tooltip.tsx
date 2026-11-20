@@ -44,11 +44,10 @@ export const Root: React.FC<RootProps> = ({ children }) => {
 
 Root.displayName = "Tooltip.Root";
 
-interface TriggerProps
-    extends Omit<
-        React.ComponentProps<"button">,
-        "popoverTarget" | "aria-controls" | "aria-haspopup" | "aria-describedby"
-    > {}
+interface TriggerProps extends Omit<
+    React.ComponentProps<"button">,
+    "popoverTarget" | "aria-controls" | "aria-haspopup" | "aria-describedby"
+> {}
 
 export const Trigger: React.FC<TriggerProps> = ({
     className = "",
@@ -113,11 +112,10 @@ export const Trigger: React.FC<TriggerProps> = ({
 
 Trigger.displayName = "Tooltip.Trigger";
 
-interface ContentProps
-    extends Omit<
-        React.ComponentPropsWithoutRef<"div">,
-        "id" | "role" | "popover"
-    > {
+interface ContentProps extends Omit<
+    React.ComponentPropsWithoutRef<"div">,
+    "id" | "role" | "popover"
+> {
     tooltipArea?: PositionArea;
 }
 
