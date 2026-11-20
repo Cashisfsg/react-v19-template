@@ -1,114 +1,149 @@
-import { useCallback, useId, useMemo, useRef } from "react";
+import { useCallback, useEffect, useId, useMemo, useRef } from "react";
+
+import { Anchor, type AnchorPlacement } from "~/shared/ui/anchor";
 
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
+import { composeRefs } from "~/shared/lib/utils/compose-refs";
 
 import { TooltipContext, useTooltipContext } from "./use-tooltip-context";
 
-import styles from "./Tooltip.module.css";
+import styles from "./tooltip.module.css";
 
-import type { PositionArea } from "./types";
+const OPEN_DELAY = 1000;
+const CLOSE_DELAY = 500;
 
 interface RootProps extends React.PropsWithChildren {}
 
+/**
+ * A short description of a control, shown while it is hovered or focused.
+ *
+ * Built on a `hint` popover hung off the trigger by `shared/ui/anchor`. Not on
+ * `Popover`: that one opens by `popovertarget`, which makes the trigger a
+ * control that expands a panel, and a tooltip only describes its trigger.
+ */
 export const Root: React.FC<RootProps> = ({ children }) => {
     const tooltipId = `tooltip-${useId()}`;
-    const tooltipRef = useRef<HTMLDivElement>(null);
-    const timeoutRef = useRef<NodeJS.Timeout>(undefined);
+    const tooltipRef = useRef<HTMLElement>(null);
+    const timeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
 
-    const showTooltip = useCallback((delay: number = 1000) => {
+    const cancel = useCallback(() => {
         clearTimeout(timeoutRef.current);
+    }, []);
 
+    const show = useCallback(() => {
+        clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
             tooltipRef.current?.showPopover();
-        }, delay);
+        }, OPEN_DELAY);
     }, []);
 
-    const hideTooltip = useCallback((delay: number = 500) => {
+    const hideNow = useCallback(() => {
         clearTimeout(timeoutRef.current);
+        tooltipRef.current?.hidePopover();
+    }, []);
 
+    const hide = useCallback(() => {
+        clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
             tooltipRef.current?.hidePopover();
-        }, delay);
+        }, CLOSE_DELAY);
     }, []);
+
+    // WCAG 1.4.13: content shown on hover or focus can be dismissed without
+    // moving the pointer or focus. A `hint` popover closes on Escape by
+    // itself, but a browser without `hint` treats the value as `manual`,
+    // which does not.
+    const onDocumentKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === "Escape") hideNow();
+        },
+        [hideNow]
+    );
+
+    useEffect(
+        () => () => {
+            clearTimeout(timeoutRef.current);
+            document.removeEventListener("keydown", onDocumentKeyDown);
+        },
+        [onDocumentKeyDown]
+    );
 
     const contextValue = useMemo(
         () => ({
             tooltipId,
             tooltipRef,
-            timeoutRef,
-            showTooltip,
-            hideTooltip
+            show,
+            hide,
+            hideNow,
+            cancel,
+            onDocumentKeyDown
         }),
-        [tooltipId, hideTooltip, showTooltip]
+        [tooltipId, show, hide, hideNow, cancel, onDocumentKeyDown]
     );
 
-    return <TooltipContext value={contextValue}>{children}</TooltipContext>;
+    return (
+        <Anchor.Root>
+            <TooltipContext value={contextValue}>{children}</TooltipContext>
+        </Anchor.Root>
+    );
 };
 
 Root.displayName = "Tooltip.Root";
 
+// A touch has no hover: a tap is the trigger's own action, and a tooltip that
+// opened a second later would cover what the tap brought up.
+const isHoverPointer = (event: React.PointerEvent) =>
+    event.pointerType !== "touch";
+
 interface TriggerProps extends Omit<
     React.ComponentProps<"button">,
-    "popoverTarget" | "aria-controls" | "aria-haspopup" | "aria-describedby"
+    "aria-describedby" | "popoverTarget" | "popoverTargetAction"
 > {}
 
+/**
+ * The control the tooltip describes, and only describes: no popovertarget,
+ * whose implicit aria-expanded would announce a panel the reader can open,
+ * no aria-haspopup or aria-controls, and a click does what the button is for.
+ */
 export const Trigger: React.FC<TriggerProps> = ({
-    className = "",
+    type = "button",
     onBlur,
     onClick,
     onFocus,
-    onMouseEnter,
-    onMouseLeave,
+    onPointerEnter,
+    onPointerLeave,
     ...props
 }) => {
-    const { tooltipId, tooltipRef, timeoutRef, showTooltip, hideTooltip } =
-        useTooltipContext();
+    const { tooltipId, show, hide, hideNow } = useTooltipContext();
 
-    const onMouseEnterHandler: React.MouseEventHandler<
+    const onPointerEnterHandler: React.PointerEventHandler<
         HTMLButtonElement
-    > = () => {
-        showTooltip();
+    > = event => {
+        if (isHoverPointer(event)) show();
     };
 
-    const onMouseLeaveHandler: React.MouseEventHandler<
+    const onPointerLeaveHandler: React.PointerEventHandler<
         HTMLButtonElement
-    > = () => {
-        hideTooltip();
-    };
-
-    const onFocusHandler: React.FocusEventHandler<HTMLButtonElement> = () => {
-        showTooltip();
-    };
-
-    const onBlurHandler: React.FocusEventHandler<HTMLButtonElement> = () => {
-        clearTimeout(timeoutRef.current);
-        tooltipRef.current?.hidePopover();
-    };
-
-    const onClickHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-        clearTimeout(timeoutRef.current);
+    > = event => {
+        if (isHoverPointer(event)) hide();
     };
 
     return (
-        <button
+        <Anchor.Target
             {...props}
-            popoverTarget={tooltipId}
-            aria-haspopup="true"
-            aria-controls={tooltipId}
+            type={type}
             aria-describedby={tooltipId}
-            onMouseEnter={composeEventHandlers(
-                onMouseEnter,
-                onMouseEnterHandler
+            onPointerEnter={composeEventHandlers(
+                onPointerEnter,
+                onPointerEnterHandler
             )}
-            onMouseLeave={composeEventHandlers(
-                onMouseLeave,
-                onMouseLeaveHandler
+            onPointerLeave={composeEventHandlers(
+                onPointerLeave,
+                onPointerLeaveHandler
             )}
-            onFocus={composeEventHandlers(onFocus, onFocusHandler)}
-            onBlur={composeEventHandlers(onBlur, onBlurHandler)}
-            onClick={composeEventHandlers(onClick, onClickHandler)}
-            data-anchor={`--${tooltipId}`}
-            className={` ${styles.trigger} ${className}`.trim()}
+            onFocus={composeEventHandlers(onFocus, show)}
+            onBlur={composeEventHandlers(onBlur, hideNow)}
+            onClick={composeEventHandlers(onClick, hideNow)}
         />
     );
 };
@@ -116,49 +151,72 @@ export const Trigger: React.FC<TriggerProps> = ({
 Trigger.displayName = "Tooltip.Trigger";
 
 interface ContentProps extends Omit<
-    React.ComponentPropsWithoutRef<"div">,
+    React.ComponentProps<"div">,
     "id" | "role" | "popover"
 > {
-    tooltipArea?: PositionArea;
+    /** Where it goes by the trigger: above it unless stated. It flips when
+        there is no room. */
+    placement?: AnchorPlacement;
 }
+
+const ABOVE: AnchorPlacement = { side: "block-start" };
 
 export const Content: React.FC<ContentProps> = ({
     className = "",
-    tooltipArea = "span-self-block-end self-inline-start",
-    onMouseEnter,
-    onMouseLeave,
+    placement = ABOVE,
+    onPointerEnter,
+    onPointerLeave,
+    onToggle,
+    ref,
     ...props
 }) => {
-    const { tooltipId, tooltipRef, showTooltip, hideTooltip } =
+    const { tooltipId, tooltipRef, hide, cancel, onDocumentKeyDown } =
         useTooltipContext();
 
-    const onMouseEnterHandler: React.MouseEventHandler<HTMLDivElement> = () => {
-        showTooltip();
+    // WCAG 1.4.13 again: the pointer can move onto the tooltip without it
+    // closing under it.
+    const onPointerEnterHandler: React.PointerEventHandler<
+        HTMLDivElement
+    > = () => {
+        cancel();
     };
 
-    const onMouseLeaveHandler: React.MouseEventHandler<HTMLDivElement> = () => {
-        hideTooltip();
+    const onPointerLeaveHandler: React.PointerEventHandler<
+        HTMLDivElement
+    > = () => {
+        hide();
+    };
+
+    const onToggleHandler: React.ToggleEventHandler<HTMLDivElement> = event => {
+        if (event.newState === "open") {
+            document.addEventListener("keydown", onDocumentKeyDown);
+        } else {
+            document.removeEventListener("keydown", onDocumentKeyDown);
+        }
     };
 
     return (
-        <div
+        <Anchor.Positioned
             {...props}
             id={tooltipId}
             role="tooltip"
-            popover="auto"
-            onMouseEnter={composeEventHandlers(
-                onMouseEnter,
-                onMouseEnterHandler
+            // `hint`, unlike `auto`, leaves an open menu or popover open when
+            // it shows. A browser without it falls back to `manual`.
+            popover="hint"
+            placement={placement}
+            onPointerEnter={composeEventHandlers(
+                onPointerEnter,
+                onPointerEnterHandler
             )}
-            onMouseLeave={composeEventHandlers(
-                onMouseLeave,
-                onMouseLeaveHandler
+            onPointerLeave={composeEventHandlers(
+                onPointerLeave,
+                onPointerLeaveHandler
             )}
-            data-anchor={`--${tooltipId}`}
-            data-anchor-position-block={tooltipArea.split(" ")[0]}
-            data-anchor-position-inline={tooltipArea.split(" ")[1]}
-            ref={tooltipRef}
+            onToggle={composeEventHandlers(onToggle, onToggleHandler)}
+            ref={composeRefs(tooltipRef, ref)}
             className={`${styles.tooltip} ${className}`.trim()}
         />
     );
 };
+
+Content.displayName = "Tooltip.Content";

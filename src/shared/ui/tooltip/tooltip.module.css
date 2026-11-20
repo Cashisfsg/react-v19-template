@@ -1,0 +1,13 @@
+@layer components {
+    /* Undoes what the UA sheet gives a popover that a tooltip does not want;
+       where it sits is Anchor's. Zero specificity, so a caller's own styles
+       win. */
+    :where(.tooltip) {
+        padding: 0;
+
+        color: inherit;
+
+        background: transparent;
+        border: none;
+    }
+}
