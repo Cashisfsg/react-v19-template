@@ -6,7 +6,7 @@ export const composeEventHandlers = <Event extends React.SyntheticEvent>(
         external?.(event);
 
         if (!event.defaultPrevented) {
-            return internal(event);
+            internal(event);
         }
     };
 };

@@ -2,8 +2,9 @@ import { useId, useMemo, useRef } from "react";
 
 import { composeRefs } from "~/shared/lib/utils/compose-refs";
 
-import styles from "./popover.module.css";
 import { PopoverContext, usePopoverContext } from "./use-popover-context";
+
+import styles from "./popover.module.css";
 
 interface PopoverRootProps extends React.PropsWithChildren {}
 

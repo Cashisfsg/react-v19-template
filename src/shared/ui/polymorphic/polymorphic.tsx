@@ -1,4 +1,5 @@
 import React from "react";
+
 import { Slot } from "../slot";
 
 type ElementProps<E extends React.ElementType = React.ElementType> = {

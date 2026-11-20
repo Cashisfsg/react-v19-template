@@ -1,8 +1,11 @@
 import { useCallback, useId, useMemo, useRef } from "react";
-import { TooltipContext, useTooltipContext } from "./use-tooltip-context";
 
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
+
+import { TooltipContext, useTooltipContext } from "./use-tooltip-context";
+
 import styles from "./Tooltip.module.css";
+
 import type { PositionArea } from "./types";
 
 interface RootProps extends React.PropsWithChildren {}

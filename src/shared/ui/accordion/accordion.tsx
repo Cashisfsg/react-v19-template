@@ -1,6 +1,7 @@
 import { useId, useMemo } from "react";
 
 import { AccordionContext, useAccordionContext } from "./accordion-context";
+
 import styles from "./Accordion.module.css";
 
 interface RootProps extends React.PropsWithChildren {}

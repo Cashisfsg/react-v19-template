@@ -3,11 +3,14 @@ import tseslint from "typescript-eslint";
 
 import importPlugin from "eslint-plugin-import";
 import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y";
-import eslintPluginPrettier from "eslint-plugin-prettier";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import unusedImports from "eslint-plugin-unused-imports";
+
+// Last in the list, so it switches off every rule that fights the formatter;
+// Prettier runs as its own step. https://prettier.io/docs/integrating-with-linters
+import eslintConfigPrettier from "eslint-config-prettier";
 
 import globals from "globals";
 
@@ -19,21 +22,9 @@ export default tseslint.config([
         "**/.react-router/**",
         "**/dist/**",
         "**/build/**",
-        "**/settings.json",
-        "**/vite.config.ts",
-        "vite.config.ts",
-        "tailwind.config.js",
+        "**/coverage/**",
         "eslint.config.js",
-        "postcss.config.js",
-        "craco.config.js",
-        "tsconfig.json",
-        "tsconfig.app.json",
-        "tsconfig.node.json",
-        "check-fluent-syntax.js",
-        "check-i18n-keys.js",
-        "check-i18n-missing.js",
-        "export-missing-keys.js",
-        "get-missing-for-locale.js"
+        "stylelint.config.js"
     ]),
     {
         files: ["*.{ts,tsx}", "**/*.{ts,tsx}"],
@@ -71,16 +62,11 @@ export default tseslint.config([
         },
 
         plugins: {
-            react: react,
-            "unused-imports": unusedImports,
-            prettier: eslintPluginPrettier
+            "unused-imports": unusedImports
         },
 
         rules: {
-            ...react.configs.recommended.rules,
-            ...react.configs["jsx-runtime"].rules,
-            ...reactHooks.configs.recommended.rules,
-            // "@typescript-eslint/no-empty-interface": "off",
+            ...react.configs.flat["jsx-runtime"].rules,
 
             "no-console": [
                 "warn",
@@ -91,8 +77,16 @@ export default tseslint.config([
 
             "react/react-in-jsx-scope": "off",
             "react/prop-types": "off",
+            // <dialog closedby> is in React 19.3, not yet in the plugin's list.
+            "react/no-unknown-property": ["error", { ignore: ["closedby"] }],
 
             "@typescript-eslint/no-empty-object-type": "off",
+            // A loader or action refuses a request by throwing the Response
+            // React Router built (redirect, data with a status), not an Error.
+            "@typescript-eslint/only-throw-error": [
+                "error",
+                { allow: [{ from: "lib", name: "Response" }] }
+            ],
             "@typescript-eslint/return-await": "error",
             "@typescript-eslint/no-floating-promises": "error",
             "@typescript-eslint/restrict-template-expressions": [
@@ -102,12 +96,41 @@ export default tseslint.config([
                 }
             ],
 
-            "prettier/prettier": [
-                "warn",
+            // The route module exports React Router reads, beside the component.
+            "react-refresh/only-export-components": [
+                "error",
                 {
-                    endOfLine: "auto"
+                    allowConstantExport: true,
+                    allowCompoundComponents: true,
+                    allowExportNames: [
+                        "meta",
+                        "links",
+                        "headers",
+                        "handle",
+                        "loader",
+                        "clientLoader",
+                        "action",
+                        "clientAction",
+                        "middleware",
+                        "clientMiddleware",
+                        "shouldRevalidate",
+                        "ErrorBoundary",
+                        "HydrateFallback",
+                        "Layout"
+                    ]
                 }
             ],
+
+            // tsc already reports a case that falls through
+            // (noFallthroughCasesInSwitch); this finds the comment left behind.
+            "no-fallthrough": [
+                "error",
+                { reportUnusedFallthroughComment: true }
+            ],
+
+            // eslint-plugin-unused-imports replaces it, as its docs set up;
+            // with both on, every unused variable is reported twice.
+            "@typescript-eslint/no-unused-vars": "off",
 
             "unused-imports/no-unused-imports": "error",
             "unused-imports/no-unused-vars": [
@@ -118,7 +141,6 @@ export default tseslint.config([
                     caughtErrors: "all",
                     caughtErrorsIgnorePattern: "^_",
                     destructuredArrayIgnorePattern: "^_",
-                    varsIgnorePattern: "^_",
                     ignoreRestSiblings: true
                 }
             ],
@@ -132,8 +154,8 @@ export default tseslint.config([
                         "builtin",
                         "external",
                         "internal",
-                        ["sibling", "index"],
                         "parent",
+                        ["sibling", "index"],
                         "type",
                         "object"
                     ],
@@ -273,6 +295,12 @@ export default tseslint.config([
                             pattern: "~/shared/**",
                             group: "internal",
                             position: "after"
+                        },
+                        {
+                            pattern: "*.css",
+                            patternOptions: { matchBase: true, nocase: true },
+                            group: "sibling",
+                            position: "after"
                         }
                     ],
                     pathGroupsExcludedImportTypes: ["react"],
@@ -288,5 +316,7 @@ export default tseslint.config([
                 }
             ]
         }
-    }
+    },
+
+    eslintConfigPrettier
 ]);
