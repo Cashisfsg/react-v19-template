@@ -1,0 +1,40 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.5rem;
+
+        max-inline-size: 32rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .row {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 1rem;
+
+        padding-block: 4rem;
+    }
+
+    .panel {
+        inline-size: 14rem;
+
+        padding: 0.75rem;
+        margin: 0;
+
+        background: Canvas;
+        border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+        border-radius: 0.5rem;
+    }
+}
