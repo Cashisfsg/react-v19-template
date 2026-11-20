@@ -1,72 +1,74 @@
-body:has(div[inert]) {
-    overflow-y: hidden;
-}
+@layer components {
+    body:has(div[inert]) {
+        overflow-y: hidden;
+    }
 
-.modal {
-    position: fixed;
-    inset: 0;
+    .modal {
+        position: fixed;
+        inset: 0;
 
-    display: none;
+        display: none;
 
-    width: clamp(320px, 100vw - 2rem, 768px);
-    min-width: 320px;
+        width: clamp(320px, 100vw - 2rem, 768px);
+        min-width: 320px;
 
-    margin: auto;
+        margin: auto;
 
-    overflow-y: auto;
+        overflow-y: auto;
 
-    overscroll-behavior: none;
+        overscroll-behavior: none;
 
-    color: inherit;
+        color: inherit;
 
-    background: transparent;
+        background: transparent;
 
-    opacity: 0;
-
-    scale: 0.8;
-
-    /* transition-property: display scale opacity; */
-    transition-duration: 0.5s;
-    transition-behavior: allow-discrete;
-}
-
-.modal:modal {
-    display: grid;
-
-    opacity: 1;
-
-    scale: 1;
-
-    @starting-style {
         opacity: 0;
 
         scale: 0.8;
+
+        /* transition-property: display scale opacity; */
+        transition-duration: 0.5s;
+        transition-behavior: allow-discrete;
     }
-}
 
-.modal::backdrop {
-    background: rgb(0 0 0 / 25%);
+    .modal:modal {
+        display: grid;
 
-    opacity: 0;
+        opacity: 1;
 
-    backdrop-filter: blur(8px);
+        scale: 1;
 
-    transition-duration: inherit;
-    transition-behavior: allow-discrete;
-}
+        @starting-style {
+            opacity: 0;
 
-.modal:modal::backdrop {
-    opacity: 1;
-}
+            scale: 0.8;
+        }
+    }
 
-@starting-style {
-    .modal:modal::backdrop {
-        background: rgb(0 0 0 / 0%);
+    .modal::backdrop {
+        background: rgb(0 0 0 / 25%);
 
         opacity: 0;
-    }
-}
 
-.content {
-    display: contents;
+        backdrop-filter: blur(8px);
+
+        transition-duration: inherit;
+        transition-behavior: allow-discrete;
+    }
+
+    .modal:modal::backdrop {
+        opacity: 1;
+    }
+
+    @starting-style {
+        .modal:modal::backdrop {
+            background: rgb(0 0 0 / 0%);
+
+            opacity: 0;
+        }
+    }
+
+    .content {
+        display: contents;
+    }
 }

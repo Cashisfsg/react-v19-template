@@ -1,32 +1,34 @@
-.accordion {
-    padding-block: 0;
+@layer components {
+    .accordion {
+        padding-block: 0;
 
-    overflow: clip;
+        overflow: clip;
 
-    summary {
-        list-style-position: outside;
+        summary {
+            list-style-position: outside;
+        }
+
+        * {
+            margin: 0;
+        }
     }
 
-    * {
-        margin: 0;
-    }
-}
+    @supports selector(::details-content) {
+        :root {
+            interpolate-size: allow-keywords;
+        }
 
-@supports selector(::details-content) {
-    :root {
-        interpolate-size: allow-keywords;
-    }
+        .accordion::details-content {
+            block-size: 0;
 
-    .accordion::details-content {
-        block-size: 0;
+            transition:
+                block-size 1s,
+                content-visibility 1s;
+            transition-behavior: allow-discrete;
+        }
 
-        transition:
-            block-size 1s,
-            content-visibility 1s;
-        transition-behavior: allow-discrete;
-    }
-
-    .accordion[open]::details-content {
-        block-size: auto;
+        .accordion[open]::details-content {
+            block-size: auto;
+        }
     }
 }

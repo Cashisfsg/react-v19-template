@@ -1,35 +1,37 @@
-:where(.marquee) {
-    --gap: 1rem;
+@layer components {
+    :where(.marquee) {
+        --gap: 1rem;
 
-    display: flex;
+        display: flex;
 
-    column-gap: var(--gap);
+        column-gap: var(--gap);
 
-    overflow: hidden;
+        overflow: hidden;
 
-    user-select: none;
-}
+        user-select: none;
+    }
 
-:where(.marquee-list) {
-    display: flex;
+    :where(.marquee-list) {
+        display: flex;
 
-    flex-shrink: 0;
+        flex-shrink: 0;
 
-    column-gap: var(--gap);
-    align-items: center;
-    justify-content: space-around;
+        column-gap: var(--gap);
+        align-items: center;
+        justify-content: space-around;
 
-    min-width: 100%;
+        min-width: 100%;
 
-    padding: 0;
+        padding: 0;
 
-    list-style-type: none;
+        list-style-type: none;
 
-    animation: scroll 20s linear infinite;
-}
+        animation: scroll 20s linear infinite;
+    }
 
-@keyframes scroll {
-    to {
-        transform: translateX(calc(-100% - var(--gap)));
+    @keyframes scroll {
+        to {
+            transform: translateX(calc(-100% - var(--gap)));
+        }
     }
 }
