@@ -1,4 +1,2 @@
-export {
-    useMutationObserverCallback,
-    useMutationObserverEffect
-} from "./use-mutation-observer";
+export { useMutationObserverCallback } from "./use-mutation-observer-callback";
+export { useMutationObserverEffect } from "./use-mutation-observer-effect";
