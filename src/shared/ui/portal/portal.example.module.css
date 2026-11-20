@@ -1,0 +1,56 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.5rem;
+
+        max-inline-size: 32rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .label {
+        margin: 0.75rem 0 0;
+
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        opacity: 0.6;
+    }
+
+    .clipped {
+        block-size: 3rem;
+
+        padding: 0 1rem;
+
+        overflow: hidden;
+
+        border: 1px dashed color-mix(in srgb, currentcolor 40%, transparent);
+        border-radius: 0.5rem;
+    }
+
+    .note {
+        position: fixed;
+        inset-block-end: 1rem;
+        inset-inline-end: 1rem;
+    }
+
+    .target {
+        min-block-size: 2rem;
+
+        padding: 0 1rem;
+
+        border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+        border-radius: 0.5rem;
+    }
+}
