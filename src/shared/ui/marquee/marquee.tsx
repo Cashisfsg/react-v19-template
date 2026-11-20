@@ -3,7 +3,7 @@ import React from "react";
 import styles from "./marquee.module.css";
 
 interface RootProps extends React.ComponentProps<"div"> {
-    children: React.ReactElement<typeof List>;
+    children: React.ReactElement<ListProps>;
 }
 
 export const Root: React.FC<RootProps> = ({

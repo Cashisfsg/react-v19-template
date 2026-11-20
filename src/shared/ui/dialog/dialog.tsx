@@ -77,7 +77,7 @@ Trigger.displayName = "Dialog.Trigger";
 // Portal.displayName = "Dialog.Portal";
 
 interface ContentProps extends Omit<React.ComponentProps<"dialog">, "id"> {
-    closedby: "any" | "closerequest" | "none";
+    closedby?: "any" | "closerequest" | "none";
 }
 
 export const Content: React.FC<ContentProps> = ({

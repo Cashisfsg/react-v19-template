@@ -7,7 +7,7 @@
         "build": "react-router build",
         "dev": "react-router dev",
         "start": "react-router-serve ./build/server/index.js",
-        "typecheck": "react-router typegen && tsc",
+        "typecheck": "react-router typegen && tsc -b",
         "lint:style": "stylelint 'src/**/*.{css,scss}'",
         "lint:style:fix": "stylelint 'src/**/*.{css,scss}' --fix"
     },
