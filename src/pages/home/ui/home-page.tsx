@@ -6,6 +6,7 @@ import { ActionButtonExample } from "~/shared/ui/button/action-button.example";
 import { ButtonExample } from "~/shared/ui/button/button.example";
 import { CountDownTimer } from "~/shared/ui/countdown-timer";
 import { DialogExample } from "~/shared/ui/dialog/dialog.example";
+import { DropZoneExample } from "~/shared/ui/drop-zone/drop-zone.example";
 import { ErrorBoundaryExample } from "~/shared/ui/error-boundary/error-boundary.example";
 import { Input } from "~/shared/ui/input";
 import { LinkExample } from "~/shared/ui/link/link.example";
@@ -17,6 +18,7 @@ import { PortalExample } from "~/shared/ui/portal/portal.example";
 import { ProgressExample } from "~/shared/ui/progress/progress.example";
 import { Section } from "~/shared/ui/section";
 import { SectionExample } from "~/shared/ui/section/section.example";
+import { SortableListExample } from "~/shared/ui/sortable-list/sortable-list.example";
 import { SwitchExample } from "~/shared/ui/switch/switch.example";
 import { TabsExample } from "~/shared/ui/tabs/tabs.example";
 import { TooltipExample } from "~/shared/ui/tooltip/tooltip.example";
@@ -99,10 +101,13 @@ const GROUPS: readonly Group[] = [
     {
         id: "forms",
         title: "Forms",
-        description: "Controls a person types into or toggles.",
+        description:
+            "Controls a person types into, toggles, drops onto or sorts.",
         examples: [
             { key: "switch", Component: SwitchExample },
-            { key: "input", Component: InputCard }
+            { key: "input", Component: InputCard },
+            { key: "drop-zone", Component: DropZoneExample },
+            { key: "sortable-list", Component: SortableListExample }
         ]
     },
     {
