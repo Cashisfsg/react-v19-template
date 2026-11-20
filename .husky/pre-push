@@ -1,0 +1,12 @@
+# Whole tree rather than this push's diff: a file that breaks the build can
+# arrive through a merge without ever being in your own changes.
+echo "🔎 Running typecheck, ESLint, Stylelint and Prettier..."
+npm run verify || exit 1
+
+# Here and not in verify, because it needs the network: npm audit asks the
+# registry. Fatal offline rather than skipped, so it is never silently lost.
+echo "🛡️  Checking dependency advisories..."
+npm run check:audit || {
+    echo "   Offline, npm audit cannot run: push once the network is back."
+    exit 1
+}
