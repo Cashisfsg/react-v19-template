@@ -1,7 +1,8 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 
-import importPlugin from "eslint-plugin-import";
+// The maintained fork of eslint-plugin-import, which stops at ESLint 9.
+import { importX } from "eslint-plugin-import-x";
 import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
@@ -36,7 +37,8 @@ export default tseslint.config([
 
             reactHooks.configs.flat["recommended-latest"],
             reactRefresh.configs.vite,
-            importPlugin.flatConfigs.recommended,
+            importX.flatConfigs.recommended,
+            importX.flatConfigs.typescript,
             react.configs.flat.recommended,
             eslintPluginJsxA11y.flatConfigs.recommended
         ],
@@ -57,7 +59,13 @@ export default tseslint.config([
 
         settings: {
             react: {
-                version: "detect"
+                // Written out, not "detect": detection calls
+                // context.getFilename(), which ESLint 10 removed, and crashes
+                // every lint. Keep it in step with the react dependency.
+                // eslint-plugin-react and jsx-a11y declare ESLint 9 at most,
+                // hence their overrides in package.json; nothing else of
+                // theirs calls a removed API under the rules enabled here.
+                version: "19.3"
             }
         },
 
@@ -146,8 +154,8 @@ export default tseslint.config([
             ],
 
             // Import order for FSD architecture
-            "import/no-unresolved": "off",
-            "import/order": [
+            "import-x/no-unresolved": "off",
+            "import-x/order": [
                 "error",
                 {
                     groups: [

@@ -89,7 +89,7 @@ export const List: React.FC<ListProps> = ({
 
         if (currentIndex === -1) return;
 
-        let newIndex = currentIndex;
+        let newIndex: number;
 
         switch (event.key) {
             case "ArrowRight":
