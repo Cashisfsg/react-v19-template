@@ -16,7 +16,7 @@ interface RootProps extends React.PropsWithChildren {
      * What the panel's id starts with. The rest is generated, so that one name
      * on many rows stays many ids.
      */
-    id?: string;
+    id?: string | undefined;
 }
 
 /**
