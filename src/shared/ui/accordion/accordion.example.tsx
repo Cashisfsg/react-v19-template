@@ -1,6 +1,6 @@
 import * as Accordion from "./accordion";
 
-import styles from "./accordion-example.module.css";
+import styles from "./accordion.example.module.css";
 
 /**
  * How the parts fit together, and the checks a unit test cannot make:
