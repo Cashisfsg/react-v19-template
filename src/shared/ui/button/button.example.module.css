@@ -1,0 +1,32 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.75rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .row {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        gap: 0.5rem;
+    }
+
+    .custom {
+        color: Canvas;
+
+        background: CanvasText;
+        border-radius: 0.25rem;
+    }
+}
