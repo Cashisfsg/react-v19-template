@@ -19,9 +19,9 @@ import styles from "./accordion.example.module.css";
  */
 export const AccordionExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Accordion example</h2>
+        <h3 className={styles.title}>Accordion example</h3>
 
-        <h3 className={styles.label}>single: one item open at a time</h3>
+        <h4 className={styles.label}>single: one item open at a time</h4>
         <Accordion.Root>
             <Accordion.Item className={styles.item}>
                 <Accordion.Trigger className={styles.trigger}>
@@ -49,7 +49,7 @@ export const AccordionExample: React.FC = () => (
             </Accordion.Item>
         </Accordion.Root>
 
-        <h3 className={styles.label}>multiple: each item on its own</h3>
+        <h4 className={styles.label}>multiple: each item on its own</h4>
         <Accordion.Root type="multiple">
             <Accordion.Item className={styles.item}>
                 <Accordion.Trigger className={styles.trigger}>

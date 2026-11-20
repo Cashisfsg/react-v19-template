@@ -19,9 +19,9 @@ import styles from "./link.example.module.css";
  */
 export const LinkExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Link example</h2>
+        <h3 className={styles.title}>Link example</h3>
 
-        <h3 className={styles.label}>inside the app</h3>
+        <h4 className={styles.label}>inside the app</h4>
         <ul className={styles.list}>
             <li>
                 <Link to="/">Home</Link>
@@ -36,7 +36,7 @@ export const LinkExample: React.FC = () => (
             </li>
         </ul>
 
-        <h3 className={styles.label}>leaving it</h3>
+        <h4 className={styles.label}>leaving it</h4>
         <ul className={styles.list}>
             <li>
                 <ExternalLink href="https://developer.mozilla.org/">

@@ -33,9 +33,9 @@ export const TabsExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Tabs example</h2>
+            <h3 className={styles.title}>Tabs example</h3>
 
-            <h3 className={styles.label}>uncontrolled, panels keep state</h3>
+            <h4 className={styles.label}>uncontrolled, panels keep state</h4>
             <Tabs.Root defaultValue="1">
                 <Tabs.List aria-label="Uncontrolled">
                     <Tabs.Trigger value="1">Notes</Tabs.Trigger>
@@ -59,7 +59,7 @@ export const TabsExample: React.FC = () => {
             </Tabs.Root>
 
             <div className={styles.header}>
-                <h3 className={styles.label}>controlled, same values</h3>
+                <h4 className={styles.label}>controlled, same values</h4>
                 <button
                     type="button"
                     onClick={handleResetClick}
@@ -79,7 +79,7 @@ export const TabsExample: React.FC = () => {
                 <Tabs.Content value="2">Second panel</Tabs.Content>
             </Tabs.Root>
 
-            <h3 className={styles.label}>kept in the address, many tabs</h3>
+            <h4 className={styles.label}>kept in the address, many tabs</h4>
             <Tabs.UrlRoot
                 values={SECTIONS}
                 param="section"

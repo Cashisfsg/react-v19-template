@@ -36,12 +36,12 @@ export const SectionExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2
+            <h3
                 id="section-example-title"
                 className={styles.title}
             >
                 Section example
-            </h2>
+            </h3>
 
             <div className={styles.controls}>
                 <label>
@@ -64,7 +64,7 @@ export const SectionExample: React.FC = () => {
 
             <Section.Root className={styles.block}>
                 <Section.Label
-                    as="h3"
+                    as="h4"
                     id={ownId}
                 >
                     Shipping
@@ -85,7 +85,7 @@ export const SectionExample: React.FC = () => {
                 aria-labelledby="section-example-title"
                 className={styles.block}
             >
-                <Section.Label as="h3">Returns</Section.Label>
+                <Section.Label as="h4">Returns</Section.Label>
                 <p>Thirty days, no questions.</p>
             </Section.Root>
         </section>

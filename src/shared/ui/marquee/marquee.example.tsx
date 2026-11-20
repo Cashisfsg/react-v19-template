@@ -31,15 +31,15 @@ export const MarqueeExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Marquee example</h2>
+            <h3 className={styles.title}>Marquee example</h3>
 
             <div className={styles.header}>
-                <h3
+                <h4
                     id={headingId}
                     className={styles.label}
                 >
                     Built with, named by this heading
-                </h3>
+                </h4>
                 <button
                     type="button"
                     onClick={handlePauseClick}
@@ -60,9 +60,9 @@ export const MarqueeExample: React.FC = () => {
                 </Marquee.List>
             </Marquee.Root>
 
-            <h3 className={styles.label}>
+            <h4 className={styles.label}>
                 aria-label, faster, wider gap, right to left
-            </h3>
+            </h4>
             <Marquee.Root
                 aria-label="Announcements"
                 className={styles.fast}

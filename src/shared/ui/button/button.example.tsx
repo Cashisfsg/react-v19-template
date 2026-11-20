@@ -26,7 +26,7 @@ const VARIANTS: readonly ButtonVariant[] = [
  */
 export const ButtonExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Button example</h2>
+        <h3 className={styles.title}>Button example</h3>
 
         <div className={styles.row}>
             {VARIANTS.map(variant => (

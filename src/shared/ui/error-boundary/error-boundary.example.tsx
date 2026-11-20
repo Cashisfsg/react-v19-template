@@ -74,9 +74,9 @@ export const ErrorBoundaryExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>ErrorBoundary example</h2>
+            <h3 className={styles.title}>ErrorBoundary example</h3>
 
-            <h3 className={styles.label}>default fallback, Try again</h3>
+            <h4 className={styles.label}>default fallback, Try again</h4>
             <label className={styles.control}>
                 <input
                     type="checkbox"
@@ -91,7 +91,7 @@ export const ErrorBoundaryExample: React.FC = () => {
                 </ErrorBoundary>
             </div>
 
-            <h3 className={styles.label}>custom fallback, reset by key</h3>
+            <h4 className={styles.label}>custom fallback, reset by key</h4>
             <div className={styles.control}>
                 <label>
                     <input
@@ -122,7 +122,7 @@ export const ErrorBoundaryExample: React.FC = () => {
                 </ErrorBoundary>
             </div>
 
-            <h3 className={styles.label}>an error React never sees</h3>
+            <h4 className={styles.label}>an error React never sees</h4>
             <div className={styles.box}>
                 <ErrorBoundary>
                     <AsyncFailure />

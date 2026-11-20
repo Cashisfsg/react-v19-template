@@ -21,7 +21,7 @@ const ACTIONS = ["Rename", "Duplicate", "Archive"];
  */
 export const PopoverExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Popover example</h2>
+        <h3 className={styles.title}>Popover example</h3>
 
         <div className={styles.row}>
             <Popover.Root>

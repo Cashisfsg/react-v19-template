@@ -26,7 +26,7 @@ export const ProgressExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Progress example</h2>
+            <h3 className={styles.title}>Progress example</h3>
 
             <label htmlFor={`${id}-upload`}>Upload</label>
             <Progress

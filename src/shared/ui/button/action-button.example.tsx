@@ -35,7 +35,7 @@ export const ActionButtonExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Action button example</h2>
+            <h3 className={styles.title}>Action button example</h3>
 
             <form
                 className={styles.form}

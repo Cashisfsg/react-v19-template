@@ -36,7 +36,7 @@ export const TooltipExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Tooltip example</h2>
+            <h3 className={styles.title}>Tooltip example</h3>
 
             <div className={styles.row}>
                 <Tooltip.Root>

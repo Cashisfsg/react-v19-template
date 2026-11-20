@@ -55,7 +55,7 @@ export const MenuExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Menu example</h2>
+            <h3 className={styles.title}>Menu example</h3>
 
             <div className={styles.row}>
                 <Menu.Root>
@@ -83,7 +83,7 @@ export const MenuExample: React.FC = () => {
                     <Menu.Sheet>
                         <Menu.Handle />
                         <header>
-                            <Menu.Title>Sort by</Menu.Title>
+                            <Menu.Title as="h4">Sort by</Menu.Title>
                             <Menu.Close aria-label="Close">✕</Menu.Close>
                         </header>
                         <Menu.List>

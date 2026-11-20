@@ -30,9 +30,9 @@ export const PortalExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Portal example</h2>
+            <h3 className={styles.title}>Portal example</h3>
 
-            <h3 className={styles.label}>out of a clipped box, into body</h3>
+            <h4 className={styles.label}>out of a clipped box, into body</h4>
             {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- the handler only counts events bubbling from the portal */}
             <div
                 className={styles.clipped}
@@ -49,7 +49,7 @@ export const PortalExample: React.FC = () => {
                 </Portal>
             </div>
 
-            <h3 className={styles.label}>into a container of your own</h3>
+            <h4 className={styles.label}>into a container of your own</h4>
             <div
                 ref={setTarget}
                 className={styles.target}

@@ -65,7 +65,7 @@ const AnchoredPopover: React.FC<AnchoredPopoverProps> = ({
  */
 export const AnchorExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Anchor example</h2>
+        <h3 className={styles.title}>Anchor example</h3>
 
         <div className={styles.row}>
             {PLACEMENTS.map(({ label, placement }) => (

@@ -36,9 +36,9 @@ export const SwitchExample: React.FC = () => {
 
     return (
         <section className={styles.example}>
-            <h2 className={styles.title}>Switch example</h2>
+            <h3 className={styles.title}>Switch example</h3>
 
-            <h3 className={styles.label}>controlled, with a visible label</h3>
+            <h4 className={styles.label}>controlled, with a visible label</h4>
             <div className={styles.row}>
                 <label htmlFor={`${id}-notifications`}>Notifications</label>
                 <Switch
@@ -51,7 +51,7 @@ export const SwitchExample: React.FC = () => {
                 </output>
             </div>
 
-            <h3 className={styles.label}>variants, on by default</h3>
+            <h4 className={styles.label}>variants, on by default</h4>
             <div className={styles.row}>
                 <Switch
                     aria-label="Primary"
@@ -69,7 +69,7 @@ export const SwitchExample: React.FC = () => {
                 />
             </div>
 
-            <h3 className={styles.label}>sizes and orientation</h3>
+            <h4 className={styles.label}>sizes and orientation</h4>
             <div className={styles.row}>
                 <Switch
                     aria-label="Small"
@@ -86,7 +86,7 @@ export const SwitchExample: React.FC = () => {
                 />
             </div>
 
-            <h3 className={styles.label}>unavailable</h3>
+            <h4 className={styles.label}>unavailable</h4>
             <div className={styles.row}>
                 <Switch
                     aria-label="Busy while saving"
@@ -105,7 +105,7 @@ export const SwitchExample: React.FC = () => {
                 />
             </div>
 
-            <h3 className={styles.label}>right to left</h3>
+            <h4 className={styles.label}>right to left</h4>
             <div
                 className={styles.row}
                 dir="rtl"

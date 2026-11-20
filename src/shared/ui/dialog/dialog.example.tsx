@@ -21,7 +21,7 @@ const DraftBody: React.FC = () => {
 
     return (
         <>
-            <h3 className={styles.heading}>Draft</h3>
+            <h4 className={styles.heading}>Draft</h4>
             <label className={styles.field}>
                 Type something, close and open again
                 <textarea
@@ -55,7 +55,7 @@ const DraftBody: React.FC = () => {
  */
 export const DialogExample: React.FC = () => (
     <section className={styles.example}>
-        <h2 className={styles.title}>Dialog example</h2>
+        <h3 className={styles.title}>Dialog example</h3>
 
         <div className={styles.row}>
             <Dialog.Root>
@@ -77,7 +77,7 @@ export const DialogExample: React.FC = () => (
                     closedby="none"
                     className={styles.panel}
                 >
-                    <h3 className={styles.heading}>Discard the draft?</h3>
+                    <h4 className={styles.heading}>Discard the draft?</h4>
                     <p>Only the buttons close this one.</p>
                     <div className={styles.actions}>
                         <Dialog.Close>Keep</Dialog.Close>
