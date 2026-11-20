@@ -31,7 +31,7 @@ export function HomePage() {
             <nav className={styles.navigation}>
                 <ul>
                     <li>
-                        <a href="#">
+                        <a href="#link-1">
                             <svg
                                 stroke="currentColor"
                                 fill="currentColor"
@@ -48,7 +48,7 @@ export function HomePage() {
                     </li>
                     <li>
                         <a
-                            href="#"
+                            href="#link-2"
                             aria-current="page"
                         >
                             <svg
@@ -66,7 +66,7 @@ export function HomePage() {
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="#link-3">
                             <svg
                                 stroke="currentColor"
                                 fill="currentColor"
@@ -119,7 +119,7 @@ export function HomePage() {
                 <p>
                     Edit <code>src/App.tsx</code> and save to test HMR
                 </p>
-                <Switch>Switch</Switch>
+                <Switch aria-label="Example switch" />
             </div>
 
             <p className={styles["read-the-docs"]}>

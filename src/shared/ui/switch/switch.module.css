@@ -1,0 +1,173 @@
+@layer components {
+    .switch {
+        --switch-thumb: 1.375em;
+        --switch-press-scale: 0.92;
+        --switch-ltr: 1;
+        --switch-thumb-color: #fff;
+        --switch-thumb-highlight: hsl(0deg 0% 100% / 25%);
+
+        /* The off track is drawn from the text colour, so it shows on a light
+           and a dark page alike; the on track is the variant's own colour. */
+        --switch-track: color-mix(in srgb, currentcolor 15%, transparent);
+        --switch-track-hover: color-mix(in srgb, currentcolor 25%, transparent);
+        --switch-track-on: #87adf0;
+        --switch-track-on-hover: #729ee8;
+
+        position: relative;
+
+        display: inline-block;
+
+        flex-shrink: 0;
+
+        inline-size: calc(var(--switch-thumb) * 2 + 0.25em);
+        block-size: calc(var(--switch-thumb) + 0.25em);
+
+        padding: 0;
+
+        font-size: 1rem;
+
+        appearance: none;
+        cursor: pointer;
+
+        background-color: var(--switch-track);
+        border: none;
+        border-radius: 100vw;
+        box-shadow: inset 0 0.0625em 0.1875em rgb(0 0 0 / 20%);
+
+        transition:
+            background-color 0.2s ease-in-out,
+            box-shadow 0.2s ease-in-out;
+
+        will-change: background-color;
+
+        &[aria-checked="true"] {
+            background-color: var(--switch-track-on);
+        }
+
+        &:focus-visible {
+            outline: 0.125em solid rgb(135 173 240 / 40%);
+            outline-offset: 0.125em;
+        }
+
+        /* Dimmed, not reshaped, as Material, Radix and Apple do. Native
+           `disabled` is a flat refusal: it fades more and points at
+           `not-allowed`. */
+        &:disabled {
+            cursor: not-allowed;
+
+            opacity: 0.5;
+        }
+
+        /* `aria-disabled` is for "unavailable while something is happening":
+           the browser gives it no styling, so it needs its own. `progress` says
+           the program is busy but the interface still answers, and it fades
+           less because it ends on its own. The native state wins when both are
+           set. */
+        &[aria-disabled="true"]:not(:disabled) {
+            cursor: progress;
+
+            opacity: 0.7;
+        }
+
+        &:is(:dir(rtl), [dir="rtl"]) {
+            --switch-ltr: -1;
+        }
+
+        &::before {
+            --switch-highlight-size: 0;
+
+            position: absolute;
+            inset-block-start: 0.125em;
+            inset-inline-start: 0.125em;
+
+            inline-size: var(--switch-thumb);
+            block-size: var(--switch-thumb);
+
+            content: "";
+
+            background-color: var(--switch-thumb-color);
+            border-radius: 50%;
+            box-shadow:
+                0 0.125em 0.25em rgb(0 0 0 / 20%),
+                0 0 0 0.0625em rgb(0 0 0 / 4%),
+                0 0 0 var(--switch-highlight-size) var(--switch-thumb-highlight);
+
+            scale: 1;
+
+            /* Travel and press in separate properties, so the press answers at
+               once while the slide keeps its 200ms easing. */
+            translate: 0;
+
+            transition:
+                translate 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+                scale 0.1s ease-out,
+                box-shadow 0.25s ease;
+
+            will-change: translate, scale;
+        }
+
+        &[aria-checked="true"]::before {
+            translate: calc(var(--switch-thumb) * var(--switch-ltr));
+        }
+
+        /* A control that will not act must not dip under the finger either, or
+           the refusal reads as a dropped tap. */
+        &:not(:disabled, [aria-disabled="true"]):active::before {
+            scale: var(--switch-press-scale);
+        }
+
+        /* Hover stays for aria-disabled, which is still reachable and the
+           highlight confirms the pointer found it; native disabled loses it. */
+        @media (hover: hover) and (pointer: fine) {
+            &:not(:disabled):hover {
+                background-color: var(--switch-track-hover);
+            }
+
+            &[aria-checked="true"]:not(:disabled):hover {
+                background-color: var(--switch-track-on-hover);
+            }
+
+            &:not(:disabled):hover::before {
+                --switch-highlight-size: 0.5em;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            &,
+            &::before {
+                transition: none;
+            }
+        }
+    }
+
+    .switch--secondary {
+        --switch-track-on: color-mix(in srgb, currentcolor 35%, transparent);
+        --switch-track-on-hover: color-mix(
+            in srgb,
+            currentcolor 45%,
+            transparent
+        );
+    }
+
+    .switch--danger {
+        --switch-track-on: #ff4973;
+        --switch-track-on-hover: #e63864;
+    }
+
+    .switch--sm {
+        --switch-thumb: 1.125em;
+    }
+
+    .switch--lg {
+        --switch-thumb: 1.75em;
+    }
+
+    .switch--vertical {
+        inline-size: calc(var(--switch-thumb) + 0.25em);
+        block-size: calc(var(--switch-thumb) * 2 + 0.25em);
+
+        &[aria-checked="true"]::before {
+            translate: 0 var(--switch-thumb);
+        }
+    }
+}
