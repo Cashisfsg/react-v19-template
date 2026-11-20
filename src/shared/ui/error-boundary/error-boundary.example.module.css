@@ -1,0 +1,49 @@
+@layer components {
+    .example {
+        display: flex;
+
+        flex-direction: column;
+
+        gap: 0.5rem;
+
+        max-inline-size: 32rem;
+
+        text-align: start;
+    }
+
+    .title {
+        margin: 0;
+
+        font-size: 1rem;
+    }
+
+    .label {
+        margin: 0.75rem 0 0;
+
+        font-size: 0.75rem;
+        font-weight: 600;
+
+        text-transform: uppercase;
+
+        opacity: 0.6;
+    }
+
+    .control {
+        display: flex;
+
+        gap: 1rem;
+
+        align-items: center;
+    }
+
+    .box {
+        padding: 0.5rem 1rem;
+
+        border: 1px dashed color-mix(in srgb, currentcolor 40%, transparent);
+        border-radius: 0.5rem;
+    }
+
+    .custom {
+        color: #dc2626;
+    }
+}
