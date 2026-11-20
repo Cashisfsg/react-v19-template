@@ -14,9 +14,9 @@
     "dependencies": {
         "@react-router/node": "^7.5.2",
         "@react-router/serve": "^7.5.2",
-        "isbot": "^5",
-        "react": "^19.0.0",
-        "react-dom": "^19.0.0",
+        "isbot": "^5.2.3",
+        "react": "^19.3.1",
+        "react-dom": "^19.3.1",
         "react-router": "^7.5.2",
         "tailwindcss": "^4.1.4"
     },
@@ -26,8 +26,8 @@
         "@tailwindcss/vite": "^4.1.4",
         "@types/dom-speech-recognition": "^0.0.6",
         "@types/node": "^22.15.2",
-        "@types/react": "^19.0.10",
-        "@types/react-dom": "^19.0.4",
+        "@types/react": "^19.3.0",
+        "@types/react-dom": "^19.3.0",
         "@vitejs/plugin-react": "^4.3.4",
         "eslint": "^9.22.0",
         "eslint-config-prettier": "^10.1.5",
