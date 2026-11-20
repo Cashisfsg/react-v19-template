@@ -1,17 +1,20 @@
-import { createContext, useContext } from "react";
+import { createContext, use } from "react";
 
-export const DialogContext = createContext<{
+interface DialogContextType {
     dialogId: string;
     dialogRef: React.RefObject<HTMLDialogElement | null>;
-    triggerRef: React.RefObject<HTMLButtonElement | null>;
-} | null>(null);
+    isOpen: boolean;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export const DialogContext = createContext<DialogContextType | null>(null);
 
 export const useDialogContext = () => {
-    const context = useContext(DialogContext);
+    const context = use(DialogContext);
 
     if (!context) {
         throw new Error(
-            "Component must be rendered as child of Dialog component"
+            "Dialog compound components must be rendered within the Dialog.Root component"
         );
     }
 

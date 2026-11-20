@@ -1,74 +1,163 @@
+:global(body:has(dialog:modal)) {
+    overflow-y: hidden;
+}
+
 @layer components {
-    body:has(div[inert]) {
-        overflow-y: hidden;
+    /* Both are always something you click, and every caller was restating it —
+       including the refusal, which several spell out as
+       `disabled:cursor-not-allowed`. Stating both here means a caller has to
+       say neither, and the nested `:where()` keeps the whole selector at zero
+       specificity, so one that does say something still wins without an
+       !important or a particular order in the class attribute. `aria-disabled`
+       is refused too: it marks a control that is reachable on purpose, and a
+       pointer over it promises an action it will not carry out. */
+    :where(.trigger, .close):where(:not(:disabled, [aria-disabled="true"])) {
+        cursor: pointer;
     }
 
-    .modal {
+    :where(.trigger, .close):where(:disabled, [aria-disabled="true"]) {
+        cursor: not-allowed;
+    }
+
+    /* `Close` with no children: the corner cross. Zero specificity like the
+       rest of the layer, so a caller's placement classes still apply. */
+    :where(.cross) {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+
+        padding: 0.4375rem;
+
+        color: color-mix(in srgb, currentcolor 40%, transparent);
+
+        border-radius: 9999px;
+
+        transition:
+            color 0.15s,
+            background-color 0.15s;
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                color: inherit;
+
+                background-color: color-mix(
+                    in srgb,
+                    currentcolor 8%,
+                    transparent
+                );
+            }
+        }
+    }
+
+    :where(.dialog) {
         position: fixed;
         inset: 0;
 
-        display: none;
+        /* One width for every dialog, set here rather than capped per call
+           site: 1rem of screen either side on a phone, and no wider than 36rem
+           on anything larger. A `<dialog>` is in the top layer and sizes
+           against the viewport, not the app's column, so without the cap it
+           would span a desktop window. */
+        inline-size: min(100% - 2rem, 36rem);
 
-        width: clamp(320px, 100vw - 2rem, 768px);
-        min-width: 320px;
+        /* The UA sheet caps a modal at `calc(100% - 6px - 2em)`, which would
+           leave about 19px either side on a phone instead of the 1rem above. */
+        max-inline-size: none;
 
+        padding: 0;
         margin: auto;
 
-        overflow-y: auto;
+        overflow: auto;
 
         overscroll-behavior: none;
 
         color: inherit;
 
-        background: transparent;
+        scrollbar-width: none;
+
+        background-color: Canvas;
+        border: 0;
+        border-radius: 0.75rem;
 
         opacity: 0;
 
-        scale: 0.8;
-
-        /* transition-property: display scale opacity; */
-        transition-duration: 0.5s;
+        transition-duration: 0.2s;
         transition-behavior: allow-discrete;
-    }
 
-    .modal:modal {
-        display: grid;
-
-        opacity: 1;
-
-        scale: 1;
-
-        @starting-style {
-            opacity: 0;
-
-            scale: 0.8;
+        &::-webkit-scrollbar {
+            display: none;
         }
     }
 
-    .modal::backdrop {
-        background: rgb(0 0 0 / 25%);
+    /* `Activity` hides the contents of a closed dialog with an inline `display:
+       none` on each child, at the moment it closes. Held to the end of the
+       dialog's own transition, so a sheet slides away with what is in it rather
+       than as an empty strip. */
+    :where(.dialog) > * {
+        transition-duration: inherit;
+        transition-property: display;
+        transition-behavior: allow-discrete;
+    }
+
+    /* A modal <dialog> takes focus on open, and some browsers then paint the
+       default focus ring around the whole box. We never want an outline on the
+       dialog box itself — its controls carry their own focus states. */
+    :where(.dialog):focus,
+    :where(.dialog):focus-visible {
+        outline: none;
+    }
+
+    /* Every dialog fades, and nothing more: a sheet brings its own slide, and a
+       dialog that should also rise into place asks for it with `motion="rise"`. */
+    :where(.dialog):modal {
+        opacity: 1;
+
+        @starting-style {
+            opacity: 0;
+        }
+    }
+
+    /* Rises 20px into place from 95% while it fades in, and the same way out. */
+    :where(.rise) {
+        --dialog-translate-y: 20px;
+        --dialog-scale: 0.95;
+        scale: var(--dialog-scale);
+        translate: 0 var(--dialog-translate-y);
+    }
+
+    :where(.rise):modal {
+        --dialog-translate-y: 0px;
+        --dialog-scale: 1;
+
+        @starting-style {
+            --dialog-translate-y: 20px;
+            --dialog-scale: 0.95;
+        }
+    }
+
+    :where(.dialog)::backdrop {
+        background-color: rgb(0 0 0 / 50%);
 
         opacity: 0;
 
-        backdrop-filter: blur(8px);
+        backdrop-filter: blur(0.5rem);
 
         transition-duration: inherit;
         transition-behavior: allow-discrete;
     }
 
-    .modal:modal::backdrop {
+    :where(.dialog):modal::backdrop {
         opacity: 1;
-    }
 
-    @starting-style {
-        .modal:modal::backdrop {
-            background: rgb(0 0 0 / 0%);
-
+        @starting-style {
             opacity: 0;
         }
     }
 
-    .content {
-        display: contents;
+    @media (prefers-reduced-motion: reduce) {
+        :where(.dialog) {
+            transition-duration: 0s;
+        }
     }
 }
