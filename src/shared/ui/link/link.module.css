@@ -1,0 +1,22 @@
+@layer components {
+    .link {
+        /* Stated rather than left to the UA: an inert external link has no
+           href, and a link given a background and padding needs the pointer
+           to say the box is pressable. */
+        cursor: pointer;
+
+        &:focus-visible {
+            outline: 2px solid;
+            outline-offset: 2px;
+        }
+
+        /* aria-disabled tells assistive technology the link is inert without
+           making it so. This is the half that stops a pointer. */
+        &[aria-disabled="true"] {
+            pointer-events: none;
+            cursor: default;
+
+            opacity: 0.4;
+        }
+    }
+}
