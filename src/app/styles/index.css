@@ -112,6 +112,16 @@
         line-height: 1.1;
     }
 
+    /* normalize inherits only the family, size and line height; the weight
+       and style follow the surrounding text too. */
+    button,
+    input,
+    optgroup,
+    select,
+    textarea {
+        font: inherit;
+    }
+
     button {
         padding: 0.6em 1.2em;
 
