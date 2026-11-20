@@ -33,7 +33,7 @@ export class ErrorBoundary extends Component<
         this.state = {
             hasError: false,
             error: null,
-            errorInfo: { componentStack: null, digest: null }
+            errorInfo: { componentStack: null }
         };
     }
 
@@ -41,7 +41,7 @@ export class ErrorBoundary extends Component<
         return {
             hasError: true,
             error,
-            errorInfo: { componentStack: null, digest: null }
+            errorInfo: { componentStack: null }
         };
     }
 
