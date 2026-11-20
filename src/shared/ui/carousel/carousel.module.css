@@ -1,0 +1,147 @@
+@layer components {
+    /* Zero specificity, so a caller's own look wins. Sizes and colours come
+       from --carousel-item-size, --carousel-gap, --carousel-control-size,
+       --carousel-accent and --carousel-dot. */
+    :where(.carousel) {
+        display: grid;
+
+        grid-template-areas:
+            "previous slides next"
+            "pagination pagination pagination";
+        grid-template-columns: auto minmax(0, 1fr) auto;
+
+        gap: 0.75rem 0.5rem;
+
+        align-items: center;
+    }
+
+    :where(.scroller) {
+        display: grid;
+
+        grid-area: slides;
+        grid-auto-columns: var(--carousel-item-size, 100%);
+        grid-auto-flow: column;
+
+        gap: var(--carousel-gap, 1rem);
+
+        overflow-x: auto;
+
+        overscroll-behavior-x: contain;
+
+        scroll-snap-type: inline mandatory;
+
+        scrollbar-width: thin;
+    }
+
+    /* The glide only for those who have not asked the system for less
+       motion; the snapping itself stays. */
+    @media (prefers-reduced-motion: no-preference) {
+        :where(.scroller) {
+            scroll-behavior: smooth;
+        }
+    }
+
+    :where(.item) {
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+    }
+
+    :where(.control) {
+        display: grid;
+
+        place-items: center;
+
+        inline-size: var(--carousel-control-size, 2.5rem);
+        aspect-ratio: 1;
+
+        padding: 0;
+
+        color: inherit;
+
+        cursor: pointer;
+
+        background: color-mix(in srgb, currentcolor 8%, transparent);
+        border: 1px solid color-mix(in srgb, currentcolor 20%, transparent);
+        border-radius: 50%;
+    }
+
+    :where(.control) svg {
+        inline-size: 60%;
+    }
+
+    :where(.control[aria-disabled="true"]) {
+        cursor: not-allowed;
+
+        opacity: 0.4;
+    }
+
+    :where(.control:focus-visible, .tab:focus-visible) {
+        outline: 2px solid var(--carousel-accent, Highlight);
+        outline-offset: 2px;
+    }
+
+    :where(.previous) {
+        grid-area: previous;
+    }
+
+    :where(.next) {
+        grid-area: next;
+    }
+
+    /* The arrows point the way the slides go, which flips with the text. */
+    :where(.control):dir(rtl) svg {
+        transform: scaleX(-1);
+    }
+
+    :where(.pagination) {
+        display: flex;
+
+        flex-wrap: wrap;
+
+        grid-area: pagination;
+
+        gap: 0.5rem;
+
+        justify-content: center;
+    }
+
+    :where(.tab) {
+        inline-size: 0.75rem;
+        aspect-ratio: 1;
+
+        padding: 0;
+
+        cursor: pointer;
+
+        background: var(
+            --carousel-dot,
+            color-mix(in srgb, currentcolor 30%, transparent)
+        );
+        border: 0;
+        border-radius: 50%;
+
+        scale: 0.75;
+
+        transition: scale 0.15s ease;
+    }
+
+    :where(.tab[aria-selected="true"]) {
+        background: var(--carousel-accent, Highlight);
+
+        scale: 1;
+    }
+
+    /* Read out, never seen. */
+    :where(.status) {
+        position: absolute;
+
+        inline-size: 1px;
+        block-size: 1px;
+
+        overflow: hidden;
+
+        white-space: nowrap;
+
+        clip-path: inset(50%);
+    }
+}

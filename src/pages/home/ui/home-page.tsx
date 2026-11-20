@@ -4,6 +4,7 @@ import { AccordionExample } from "~/shared/ui/accordion/accordion.example";
 import { AnchorExample } from "~/shared/ui/anchor/anchor.example";
 import { ActionButtonExample } from "~/shared/ui/button/action-button.example";
 import { ButtonExample } from "~/shared/ui/button/button.example";
+import { CarouselExample } from "~/shared/ui/carousel/carousel.example";
 import { CountDownTimer } from "~/shared/ui/countdown-timer";
 import { DialogExample } from "~/shared/ui/dialog/dialog.example";
 import { DropZoneExample } from "~/shared/ui/drop-zone/drop-zone.example";
@@ -97,6 +98,7 @@ const GROUPS: readonly Group[] = [
             { key: "section", Component: SectionExample },
             { key: "marquee", Component: MarqueeExample },
             { key: "link", Component: LinkExample },
+            { key: "carousel", Component: CarouselExample },
             {
                 key: "navigation-treeview",
                 Component: NavigationTreeviewExample
