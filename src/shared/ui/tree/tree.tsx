@@ -4,8 +4,10 @@ type RecursiveNode<T> = {
 
 export interface RecursiveTree<T> extends RecursiveNode<T> {}
 
-interface TreeProps<Node extends RecursiveNode<Node>>
-    extends Omit<React.ComponentProps<"ul">, "role"> {
+interface TreeProps<Node extends RecursiveNode<Node>> extends Omit<
+    React.ComponentProps<"ul">,
+    "role"
+> {
     renderItem: (item: Node) => React.ReactNode;
     nodes: Node[];
 }
