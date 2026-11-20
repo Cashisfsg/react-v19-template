@@ -1,0 +1,87 @@
+@layer components {
+    /* Only the spinner. Press, refusal and focus come from
+       `button.module.css`. */
+    :where(.action) {
+        /* One cell, two occupants. The label and the spinner are stacked rather
+           than swapped, so the button is as wide as the wider of the two at all
+           times and does not resize when a save starts — a button that shrinks
+           under the finger is how a second click lands somewhere else. */
+        display: inline-grid;
+
+        place-items: center;
+    }
+
+    /* `1 / 1` is row-start / column-start, both ends left to `auto`, which
+       spans a single track — so both land in the same cell. `1 / -1` would read
+       as column-start: -1, a line counted from the end of the explicit grid,
+       which is not the same thing and not what is wanted here. */
+    :where(.label),
+    :where(.spinner) {
+        grid-area: 1 / 1;
+
+        transition: opacity 0.15s ease;
+    }
+
+    /* Sized in `em` so it matches the label it stands in for, whatever the
+       caller set the text to. */
+    :where(.spinner) {
+        inline-size: 1.25em;
+        block-size: 1.25em;
+
+        /* Stated rather than left to the initial value: an outer `<svg>` is a
+           replaced element and takes the CSS box origin, but the SVG rendering
+           model has its own idea of 0 0, and a spinner rotating about its
+           corner is a distinctive kind of broken. */
+        transform-origin: 50% 50%;
+
+        /* Always declared, and paused when idle — not declared only while
+           loading. The difference is visible at both ends: an animation that is
+           removed does not finish, it stops existing, and the element snaps
+           back to `rotate: none` from whatever angle it was at. Under the 150ms
+           fade that snap is exactly what a stutter at the start and the end
+           looks like. Pausing freezes the turn where it is and resumes from
+           there, so neither end has a jump. A caller's `animation` shorthand
+           would reset the play state to `running` and take that away. */
+        animation: action-button-spin 1s linear infinite;
+        animation-play-state: paused;
+    }
+
+    :where(.action[data-loading]) :where(.spinner) {
+        animation-play-state: running;
+    }
+
+    @keyframes action-button-spin {
+        to {
+            rotate: 1turn;
+        }
+    }
+
+    /* Opacity, not `visibility` — and this is the whole reason the choice
+       needed making. MDN: a `visibility: hidden` element "and all its
+       descendant elements [will] no longer be announced by screen reading
+       technology". The label is what gives this button its accessible name, so
+       hiding it that way would leave a nameless button announced as just
+       "button" for the length of every save. `opacity: 0` keeps the box, keeps
+       the name, and hides the pixels. `display: none` is out for a third
+       reason: it would collapse the cell and resize the button.
+       https://developer.mozilla.org/en-US/docs/Web/CSS/visibility */
+    :where(.action:not([data-loading])) :where(.spinner),
+    :where(.action[data-loading]) :where(.label) {
+        opacity: 0;
+    }
+
+    /* The cross-fade goes; the rotation only slows. While it is turning it is
+       the only thing saying work is in progress, and a frozen spinner reads as
+       an icon — a worse answer than a gentler spin.
+       https://developer.mozilla.org/en-US/docs/Web/CSS/@media/prefers-reduced-motion */
+    @media (prefers-reduced-motion: reduce) {
+        :where(.label),
+        :where(.spinner) {
+            transition: none;
+        }
+
+        :where(.spinner) {
+            animation-duration: 2s;
+        }
+    }
+}

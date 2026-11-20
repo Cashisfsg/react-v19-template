@@ -1,0 +1,234 @@
+@layer components {
+    :where(.button) {
+        padding-block: 0.875rem;
+        padding-inline: 1rem;
+
+        font-size: 0.875rem;
+        font-weight: 500;
+
+        line-height: 1.25rem;
+
+        cursor: pointer;
+
+        /* A gradient otherwise starts inside that border and repeats under it,
+           which shows its far end as a hairline along the edge. */
+        background-origin: border-box;
+
+        /* Transparent on the base so every variant is the same height side by
+           side. */
+        border: 1px solid transparent;
+
+        transition:
+            color 0.15s ease,
+            background-color 0.2s ease,
+            box-shadow 0.15s ease,
+            scale 0.1s ease-out;
+
+        /* A fixed colour, not `currentColor`: the primary's text is dark and
+           would draw a ring nobody can see against the page. The offset keeps
+           the ring off the button's own edge, where the transparent variant's
+           border would swallow it. `:focus-visible` so a tap leaves no ring and
+           the keyboard always does. */
+        &:where(:focus-visible) {
+            outline: 2px solid #87adf0;
+            outline-offset: 2px;
+        }
+
+        &:where(:active) {
+            scale: 0.98;
+        }
+
+        /* The dip promises an action that will not happen. */
+        &:where(:disabled, [aria-disabled="true"]):where(:active) {
+            scale: 1;
+        }
+
+        &:where(:disabled) {
+            cursor: not-allowed;
+
+            opacity: 0.6;
+        }
+
+        /* Still focusable, unlike `:disabled`: this state ends on its own, so
+           it says "busy" and fades less than the flat refusal above. */
+        &:where([aria-disabled="true"]:not(:disabled)) {
+            cursor: progress;
+
+            opacity: 0.8;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            transition: none;
+        }
+    }
+
+    :where(.button--primary) {
+        color: #0b0e21;
+
+        background: #87adf0;
+        box-shadow: 0 4px 20px rgb(135 173 240 / 25%);
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                background: #729ee8;
+            }
+        }
+    }
+
+    /* The grey of an unselected tab: quieter than the primary, still a filled
+       shape. */
+    :where(.button--secondary) {
+        color: #8a8d9f;
+
+        background: rgb(22 24 41 / 60%);
+        border-color: rgb(255 255 255 / 5%);
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                background: rgb(255 255 255 / 5%);
+            }
+        }
+    }
+
+    /* No fill of its own, so a brightness filter on hover would have nothing to
+       brighten: the hover has to add a background. */
+    :where(.button--transparent) {
+        color: #87adf0;
+
+        border-color: rgb(135 173 240 / 25%);
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                background: rgb(135 173 240 / 10%);
+            }
+        }
+    }
+
+    /* Translucent on purpose: an irreversible-sounding action in the same
+       falling red and white ring as the danger marks above it, not a solid
+       alarm. */
+    :where(.button--danger) {
+        --button-danger-fill-top: 38%;
+        --button-danger-fill-bottom: 14%;
+
+        position: relative;
+
+        font-weight: 600;
+
+        color: #ff4973;
+
+        background: linear-gradient(
+                180deg,
+                rgb(255 73 115 / var(--button-danger-fill-top)) 0%,
+                rgb(255 73 115 / var(--button-danger-fill-bottom)) 100%
+            )
+            border-box;
+        box-shadow: 0 4px 16px rgb(255 73 115 / 18%);
+
+        /* A gradient cannot be a border colour, so the ring is cut out of a
+           pseudo element. -1px reaches over the button's own transparent border
+           to its outer edge. */
+        &::before {
+            position: absolute;
+            inset: -1px;
+
+            pointer-events: none;
+
+            content: "";
+
+            background: linear-gradient(
+                    230.61deg,
+                    rgb(255 255 255 / 20%) 0%,
+                    rgb(255 255 255 / 0%) 41.83%,
+                    rgb(255 255 255 / 2%) 66.83%,
+                    rgb(255 255 255 / 20%) 100%
+                )
+                border-box;
+            border: 1px solid transparent;
+            border-radius: inherit;
+
+            mask:
+                linear-gradient(#fff 0 0) padding-box,
+                linear-gradient(#fff 0 0) border-box;
+            mask-composite: exclude;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                --button-danger-fill-top: 50%;
+                --button-danger-fill-bottom: 22%;
+
+                color: #ff6388;
+
+                box-shadow:
+                    0 8px 12px -4px rgb(255 73 115 / 28%),
+                    0 4px 18px rgb(255 73 115 / 18%);
+            }
+        }
+
+        &:where(:active:not(:disabled, [aria-disabled="true"])) {
+            --button-danger-fill-top: 26%;
+            --button-danger-fill-bottom: 8%;
+
+            box-shadow: 0 4px 16px rgb(255 73 115 / 10%);
+        }
+
+        /* A glow promises an action that will not happen. */
+        &:where(:disabled, [aria-disabled="true"]) {
+            box-shadow: none;
+        }
+    }
+
+    /* Backing out of a dialog: quiet beside the danger action it stands next
+       to, but still a raised control rather than the flat secondary. */
+    :where(.button--cancel) {
+        font-weight: 600;
+
+        color: #8e9ac6;
+
+        background: linear-gradient(
+                180deg,
+                rgb(36 39 62 / 80%) 0%,
+                rgb(19 20 33 / 80%) 100%
+            )
+            border-box;
+        border-color: rgb(255 255 255 / 10%);
+        box-shadow: 0 4px 16px rgb(142 154 198 / 12%);
+
+        @media (hover: hover) and (pointer: fine) {
+            &:where(:hover:not(:disabled, [aria-disabled="true"])) {
+                color: #a8b3da;
+
+                background: linear-gradient(
+                        180deg,
+                        rgb(48 52 80 / 80%) 0%,
+                        rgb(27 29 46 / 80%) 100%
+                    )
+                    border-box;
+                box-shadow: 0 4px 16px rgb(142 154 198 / 18%);
+            }
+        }
+
+        &:where(:active:not(:disabled, [aria-disabled="true"])) {
+            background: linear-gradient(
+                    180deg,
+                    rgb(27 29 46 / 80%) 0%,
+                    rgb(15 16 26 / 80%) 100%
+                )
+                border-box;
+            box-shadow: 0 4px 16px rgb(142 154 198 / 6%);
+        }
+
+        &:where(:disabled, [aria-disabled="true"]) {
+            box-shadow: none;
+        }
+    }
+
+    :where(.button--rounded) {
+        border-radius: 100vw;
+
+        @supports (border-radius: calc(infinity * 1px)) {
+            border-radius: calc(infinity * 1px);
+        }
+    }
+}
