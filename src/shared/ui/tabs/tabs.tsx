@@ -1,90 +1,89 @@
-import { Activity, useRef, useState } from "react";
+import {
+    Activity,
+    useCallback,
+    useEffect,
+    useId,
+    useMemo,
+    useRef,
+    useState,
+    useTransition
+} from "react";
 
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
 import { composeRefs } from "~/shared/lib/utils/compose-refs";
 
 import { TabsContext, useTabsContext } from "./use-tabs-context";
 
-interface RootProps extends React.ComponentProps<"div"> {
-    defaultValue?: string;
+import styles from "./tabs.module.css";
+
+interface RootProps {
+    children: React.ReactNode;
+    defaultValue?: string | undefined;
     value?: string;
     onValueChange?: (value: string) => void;
 }
 
 export const Root: React.FC<RootProps> = ({
+    children,
     defaultValue,
     value: controlledValue,
-    onValueChange,
-    ...props
+    onValueChange
 }) => {
     const [uncontrolledValue, setUncontrolledValue] = useState(
         defaultValue ?? ""
     );
     const tabsRefs = useRef<HTMLButtonElement[]>([]);
+    const [isPending, startTransition] = useTransition();
+    // Ids are built from it, so two tab sets on one page with the same values
+    // do not point their triggers at each other's panels.
+    const baseId = useId();
 
     const isControlled = controlledValue !== undefined;
     const currentValue = isControlled ? controlledValue : uncontrolledValue;
 
-    const setValue = (newValue: string) => {
-        if (!isControlled) setUncontrolledValue(newValue);
-        onValueChange?.(newValue);
-    };
-
-    return (
-        <TabsContext.Provider
-            value={{ value: currentValue, setValue, tabsRefs }}
-        >
-            <div {...props} />
-        </TabsContext.Provider>
+    const setValue = useCallback(
+        (newValue: string) => {
+            startTransition(() => {
+                if (!isControlled) setUncontrolledValue(newValue);
+                onValueChange?.(newValue);
+            });
+        },
+        [isControlled, onValueChange]
     );
+
+    const contextValue = useMemo(
+        () => ({
+            value: currentValue,
+            setValue,
+            tabsRefs,
+            isPending,
+            baseId
+        }),
+        [currentValue, setValue, isPending, baseId]
+    );
+
+    return <TabsContext value={contextValue}>{children}</TabsContext>;
 };
 
 Root.displayName = "Tabs.Root";
 
-interface ListProps extends Omit<React.ComponentProps<"div">, "role"> {}
+interface ListProps extends Omit<
+    React.ComponentProps<"div">,
+    "role" | "onKeyDownCapture"
+> {}
 
 export const List: React.FC<ListProps> = ({
     "aria-orientation": ariaOrientation = "horizontal",
+    className = "",
     ...props
 }) => {
-    return (
-        <div
-            {...props}
-            role="tablist"
-            aria-orientation={ariaOrientation}
-        />
-    );
-};
-
-List.displayName = "Tabs.List";
-
-interface TriggerProps extends Omit<
-    React.ComponentProps<"button">,
-    "id" | "role" | "type" | "aria-selected" | "aria-controls" | "tabIndex"
-> {
-    value: string;
-}
-
-export const Trigger: React.FC<TriggerProps> = ({
-    value,
-    onClick,
-    onKeyDown,
-    ref,
-    ...props
-}) => {
-    const { value: activeValue, setValue, tabsRefs } = useTabsContext();
-
-    const isActive = activeValue === value;
-
-    const onClickHandler: React.MouseEventHandler<HTMLButtonElement> = () => {
-        setValue(value);
-    };
+    const { tabsRefs } = useTabsContext();
 
     const onKeyDownHandler: React.KeyboardEventHandler<
-        HTMLButtonElement
+        HTMLDivElement
     > = event => {
         const tabs = tabsRefs.current;
-        const currentIndex = tabs.findIndex(tab => tab === event.currentTarget);
+        const currentIndex = tabs.findIndex(tab => tab === event.target);
 
         if (currentIndex === -1) return;
 
@@ -107,33 +106,100 @@ export const Trigger: React.FC<TriggerProps> = ({
                 return;
         }
 
-        const newTab = tabs[newIndex];
-        if (newTab === undefined) return;
-
         event.preventDefault();
         event.stopPropagation();
-        newTab.focus();
-        newTab.click();
+        const newTab = tabs[newIndex];
+        newTab?.focus();
+        newTab?.click();
     };
 
-    const callbackRef: React.RefCallback<HTMLButtonElement> = node => {
-        if (!node || tabsRefs.current.includes(node)) return;
+    return (
+        <div
+            {...props}
+            role="tablist"
+            aria-orientation={ariaOrientation}
+            className={`${styles.list} ${className}`.trim()}
+            onKeyDownCapture={onKeyDownHandler}
+        />
+    );
+};
 
+List.displayName = "Tabs.List";
+
+interface TriggerProps extends Omit<
+    React.ComponentProps<"button">,
+    "id" | "role" | "type" | "aria-selected" | "aria-controls" | "tabIndex"
+> {
+    value: string;
+}
+
+export const Trigger: React.FC<TriggerProps> = ({
+    value,
+    onClick,
+    onPointerDown,
+    className = "",
+    ref,
+    ...props
+}) => {
+    const { value: activeValue, setValue, tabsRefs, baseId } = useTabsContext();
+    const buttonRef = useRef<HTMLButtonElement | null>(null);
+
+    const isActive = activeValue === value;
+
+    const activate = useCallback(() => {
+        setValue(value);
+    }, [setValue, value]);
+
+    useEffect(() => {
+        const node = buttonRef.current;
+        if (!node) return;
         tabsRefs.current.push(node);
+        return () => {
+            tabsRefs.current = tabsRefs.current.filter(entry => entry !== node);
+        };
+    }, [tabsRefs]);
+
+    // A touch activates on press rather than on release, so the tab answers as
+    // soon as the finger lands; the click that follows is then skipped.
+    const onPointerDownHandler: React.PointerEventHandler<
+        HTMLButtonElement
+    > = event => {
+        if (event.pointerType === "mouse" || event.button !== 0) {
+            return;
+        }
+
+        event.currentTarget.dataset.touchActivated = "true";
+        activate();
+    };
+
+    const onClickHandler: React.MouseEventHandler<
+        HTMLButtonElement
+    > = event => {
+        const trigger = event.currentTarget;
+        if (trigger.dataset.touchActivated === "true") {
+            delete trigger.dataset.touchActivated;
+        } else {
+            activate();
+        }
+        trigger.scrollIntoView({ block: "nearest", inline: "center" });
     };
 
     return (
         <button
             {...props}
-            id={`tab-${value}`}
+            id={`${baseId}-tab-${value}`}
             role="tab"
             type="button"
             aria-selected={isActive}
-            aria-controls={`panel-${value}`}
+            aria-controls={`${baseId}-panel-${value}`}
+            className={`${styles.trigger} ${className}`.trim()}
             tabIndex={isActive ? 0 : -1}
+            onPointerDown={composeEventHandlers(
+                onPointerDown,
+                onPointerDownHandler
+            )}
             onClick={composeEventHandlers(onClick, onClickHandler)}
-            onKeyDown={composeEventHandlers(onKeyDown, onKeyDownHandler)}
-            ref={composeRefs(callbackRef, ref)}
+            ref={composeRefs(buttonRef, ref)}
         />
     );
 };
@@ -142,13 +208,19 @@ Trigger.displayName = "Tabs.Trigger";
 
 interface ContentProps extends Omit<
     React.ComponentProps<"div">,
-    "id" | "role" | "aria-labelledby" | "tabIndex"
+    "id" | "role" | "aria-labelledby" | "tabIndex" | "children"
 > {
     value: string;
+    /** A function gets whether the switch to another tab is still rendering. */
+    children: React.ReactNode | ((isPending: boolean) => React.ReactNode);
 }
 
-export const Content: React.FC<ContentProps> = ({ value, ...props }) => {
-    const { value: activeValue } = useTabsContext();
+export const Content: React.FC<ContentProps> = ({
+    value,
+    children,
+    ...props
+}) => {
+    const { value: activeValue, isPending, baseId } = useTabsContext();
 
     const isActive = activeValue === value;
 
@@ -156,13 +228,16 @@ export const Content: React.FC<ContentProps> = ({ value, ...props }) => {
         <Activity mode={isActive ? "visible" : "hidden"}>
             <div
                 {...props}
-                key={value}
-                id={`panel-${value}`}
+                id={`${baseId}-panel-${value}`}
                 role="tabpanel"
                 hidden={!isActive}
-                aria-labelledby={`tab-${value}`}
+                aria-labelledby={`${baseId}-tab-${value}`}
                 tabIndex={0}
-            />
+            >
+                {typeof children === "function"
+                    ? children(isPending)
+                    : children}
+            </div>
         </Activity>
     );
 };

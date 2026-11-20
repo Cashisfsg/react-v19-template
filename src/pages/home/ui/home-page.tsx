@@ -146,7 +146,7 @@ export function HomePage() {
                 </Popover.Content>
             </Popover.Root>
 
-            <Tabs.Root>
+            <Tabs.Root defaultValue="1">
                 <Tabs.List>
                     <Tabs.Trigger value="1">Tab 1</Tabs.Trigger>
                     <Tabs.Trigger value="2">Tab 2</Tabs.Trigger>

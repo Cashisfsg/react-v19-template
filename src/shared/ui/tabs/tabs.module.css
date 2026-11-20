@@ -1,0 +1,25 @@
+@layer components {
+    .list {
+        max-inline-size: 100%;
+
+        overflow: auto hidden;
+
+        overscroll-behavior-x: contain;
+
+        scroll-snap-type: x mandatory;
+
+        scrollbar-width: none;
+
+        @media (prefers-reduced-motion: no-preference) {
+            scroll-behavior: smooth;
+        }
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    .trigger {
+        scroll-snap-align: center;
+    }
+}

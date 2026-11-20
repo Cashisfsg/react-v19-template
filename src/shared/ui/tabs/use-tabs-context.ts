@@ -4,6 +4,8 @@ export type TabsContextType = {
     value: string;
     setValue: (value: string) => void;
     tabsRefs: React.RefObject<HTMLButtonElement[]>;
+    isPending: boolean;
+    baseId: string;
 };
 
 export const TabsContext = createContext<TabsContextType | null>(null);
@@ -13,7 +15,7 @@ export const useTabsContext = () => {
 
     if (!context) {
         throw new Error(
-            "Tabs compound components must be used within <Tabs />"
+            "Tabs compound components must be used within <Tabs.Root />"
         );
     }
 
