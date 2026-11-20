@@ -9,6 +9,8 @@ import {
     useTransition
 } from "react";
 
+import { ErrorBoundary } from "~/shared/ui/error-boundary";
+
 import { composeEventHandlers } from "~/shared/lib/utils/compose-event-handlers";
 import { composeRefs } from "~/shared/lib/utils/compose-refs";
 
@@ -224,21 +226,25 @@ export const Content: React.FC<ContentProps> = ({
 
     const isActive = activeValue === value;
 
+    // A panel that throws breaks only itself, and gets another try when the
+    // reader comes back to it.
     return (
-        <Activity mode={isActive ? "visible" : "hidden"}>
-            <div
-                {...props}
-                id={`${baseId}-panel-${value}`}
-                role="tabpanel"
-                hidden={!isActive}
-                aria-labelledby={`${baseId}-tab-${value}`}
-                tabIndex={0}
-            >
-                {typeof children === "function"
-                    ? children(isPending)
-                    : children}
-            </div>
-        </Activity>
+        <ErrorBoundary resetKeys={[isActive]}>
+            <Activity mode={isActive ? "visible" : "hidden"}>
+                <div
+                    {...props}
+                    id={`${baseId}-panel-${value}`}
+                    role="tabpanel"
+                    hidden={!isActive}
+                    aria-labelledby={`${baseId}-tab-${value}`}
+                    tabIndex={0}
+                >
+                    {typeof children === "function"
+                        ? children(isPending)
+                        : children}
+                </div>
+            </Activity>
+        </ErrorBoundary>
     );
 };
 
