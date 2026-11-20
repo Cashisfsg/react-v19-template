@@ -1,5 +1,7 @@
 import { useId, useMemo } from "react";
 
+import type { PolymorphicProps } from "~/shared/lib/types/polymorphic";
+
 import { AccordionContext, useAccordionContext } from "./use-accordion-context";
 
 import styles from "./accordion.module.css";
@@ -62,10 +64,7 @@ export const Trigger: React.FC<TriggerProps> = props => <summary {...props} />;
 
 Trigger.displayName = "Accordion.Trigger";
 
-type AsProp<E extends React.ElementType> = { as?: E };
-
-type ContentProps<E extends React.ElementType> = AsProp<E> &
-    Omit<React.ComponentProps<E>, keyof AsProp<E> | "name">;
+type ContentProps<E extends React.ElementType> = PolymorphicProps<E>;
 
 /**
  * The panel the trigger reveals. Polymorphic because what it holds decides its
