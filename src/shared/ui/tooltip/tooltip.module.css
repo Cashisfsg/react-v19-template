@@ -9,5 +9,32 @@
 
         background: transparent;
         border: none;
+
+        /* A fade only, in and out, as Popover does: no slide from the
+           trigger, which would move the text being read. */
+        opacity: 0;
+
+        transition-duration: 0.15s;
+        transition-property: opacity, display, overlay;
+
+        /* `display` and `overlay` are discrete: without this they flip at the
+           start, and the tooltip would vanish before it faded. */
+        transition-behavior: allow-discrete;
+    }
+
+    :where(.tooltip:popover-open) {
+        opacity: 1;
+
+        /* An element entering the top layer has no earlier style to move
+           from. */
+        @starting-style {
+            opacity: 0;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        :where(.tooltip) {
+            transition-duration: 0s;
+        }
     }
 }
