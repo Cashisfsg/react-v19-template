@@ -2,7 +2,6 @@
     .switch {
         --switch-thumb: 1.375em;
         --switch-press-scale: 0.92;
-        --switch-ltr: 1;
         --switch-thumb-color: #fff;
         --switch-thumb-highlight: hsl(0deg 0% 100% / 25%);
 
@@ -69,10 +68,6 @@
             opacity: 0.7;
         }
 
-        &:is(:dir(rtl), [dir="rtl"]) {
-            --switch-ltr: -1;
-        }
-
         &::before {
             --switch-highlight-size: 0;
 
@@ -95,19 +90,23 @@
             scale: 1;
 
             /* Travel and press in separate properties, so the press answers at
-               once while the slide keeps its 200ms easing. */
+               once while the slide keeps its 200ms easing. Horizontal travel is
+               the logical inset, which the browser turns around in
+               right-to-left by itself; `translate` is left to the vertical
+               switch, whose block axis no direction flips. */
             translate: 0;
 
             transition:
+                inset-inline-start 0.2s cubic-bezier(0.16, 1, 0.3, 1),
                 translate 0.2s cubic-bezier(0.16, 1, 0.3, 1),
                 scale 0.1s ease-out,
                 box-shadow 0.25s ease;
 
-            will-change: translate, scale;
+            will-change: inset-inline-start, translate, scale;
         }
 
         &[aria-checked="true"]::before {
-            translate: calc(var(--switch-thumb) * var(--switch-ltr));
+            inset-inline-start: calc(100% - var(--switch-thumb) - 0.125em);
         }
 
         /* A control that will not act must not dip under the finger either, or
