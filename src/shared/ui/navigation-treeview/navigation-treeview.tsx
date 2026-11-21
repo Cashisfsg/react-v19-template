@@ -262,12 +262,19 @@ export const Item = <E extends React.ElementType = "a">({
                         aria-hidden="true"
                         className={styles.toggle}
                         onClick={handleToggle}
-                    />
+                    >
+                        <svg
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            focusable="false"
+                        >
+                            <path d="M7.293 14.707a1 1 0 0 1 0-1.414L10.586 10 7.293 6.707a1 1 0 0 1 1.414-1.414l4 4a1 1 0 0 1 0 1.414l-4 4a1 1 0 0 1-1.414 0z" />
+                        </svg>
+                    </span>
                 ) : (
-                    <span
-                        aria-hidden="true"
-                        className={styles.spacer}
-                    />
+                    /* Holds the arrow's column on a link with no section, so
+                       the words line up. */
+                    <span aria-hidden="true" />
                 )}
                 <span className={styles.label}>{label}</span>
             </Tag>

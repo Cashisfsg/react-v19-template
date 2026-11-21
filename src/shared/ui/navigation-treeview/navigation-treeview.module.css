@@ -18,13 +18,18 @@
     :where(.item) {
         display: grid;
 
-        grid-template-columns: 1rem minmax(0, 1fr);
+        /* The first column is the arrow's hit area, 24px on a side at the
+           least so a finger finds it (WCAG 2.5.8); it stands where the inline
+           padding was, so the words sit where they did. */
+        grid-template-columns: 1.5rem minmax(0, 1fr);
 
         gap: 0.375rem;
 
         align-items: center;
 
-        padding: 0.375rem 0.5rem;
+        min-block-size: 2rem;
+
+        padding-inline-end: 0.5rem;
 
         color: inherit;
 
@@ -51,44 +56,38 @@
         }
     }
 
-    /* Holds the chevron's column on a link with no section, so the words
-       line up. */
-    :where(.spacer) {
-        inline-size: 1rem;
-    }
-
     :where(.label) {
         overflow-wrap: anywhere;
     }
 
-    /* A chevron drawn with two borders, turned down when the section is
-       open. In `currentcolor`, so it follows the link. */
+    /* Fills its cell, so the whole column toggles; the chevron points along
+       the line and turns down when the section is open. */
     :where(.toggle) {
-        justify-self: center;
+        display: grid;
 
-        inline-size: 0.4rem;
-        block-size: 0.4rem;
+        place-items: center;
+        align-self: stretch;
 
         cursor: pointer;
 
-        border-block-start: 2px solid currentcolor;
-        border-inline-end: 2px solid currentcolor;
+        & > svg {
+            inline-size: 1rem;
+            block-size: 1rem;
 
-        rotate: 45deg;
-
-        transition: rotate 0.15s ease;
+            transition: rotate 0.15s ease;
+        }
     }
 
-    :where(.toggle:dir(rtl)) {
-        rotate: -45deg;
+    :where(.toggle:dir(rtl)) > svg {
+        scale: -1 1;
     }
 
-    :where(.item[aria-expanded="true"] > .toggle) {
-        rotate: 135deg;
+    :where(.item[aria-expanded="true"] > .toggle) > svg {
+        rotate: 90deg;
     }
 
     @media (prefers-reduced-motion: reduce) {
-        :where(.toggle) {
+        :where(.toggle) > svg {
             transition: none;
         }
     }
