@@ -1,8 +1,9 @@
 import eslint from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
 import tseslint from "typescript-eslint";
 
 import importPlugin from "eslint-plugin-import";
-import eslintPluginJsxA11y from "eslint-plugin-jsx-a11y";
+import jsxA11y from "eslint-plugin-jsx-a11y";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
@@ -14,45 +15,61 @@ import eslintConfigPrettier from "eslint-config-prettier";
 
 import globals from "globals";
 
-import { globalIgnores } from "eslint/config";
+// Files that run in Node rather than the browser: the tool configs and the
+// scripts beside them.
+const NODE_FILES = ["*.{js,mjs,cjs,ts}", "scripts/**/*.{js,mjs,cjs,ts}"];
 
-export default tseslint.config([
+export default defineConfig([
     globalIgnores([
         "**/node_modules/**",
         "**/.react-router/**",
         "**/dist/**",
         "**/build/**",
-        "**/coverage/**",
-        "eslint.config.js",
-        "stylelint.config.js"
+        "**/coverage/**"
     ]),
+
     {
-        files: ["*.{ts,tsx}", "**/*.{ts,tsx}"],
+        // In the config rather than a CLI flag, so the editor reports a
+        // stale disable comment too.
+        linterOptions: {
+            reportUnusedDisableDirectives: "error"
+        }
+    },
+
+    // Plain JavaScript: the configs and scripts, without type information.
+    {
+        files: ["**/*.{js,mjs,cjs}"],
+        extends: [eslint.configs.recommended]
+    },
+
+    {
+        files: ["**/*.{ts,tsx}"],
         extends: [
             eslint.configs.recommended,
 
-            ...tseslint.configs.recommendedTypeChecked,
-            ...tseslint.configs.strictTypeChecked,
+            // A superset of recommendedTypeChecked.
+            tseslint.configs.strictTypeChecked,
 
             reactHooks.configs.flat["recommended-latest"],
             reactRefresh.configs.vite,
             importPlugin.flatConfigs.recommended,
+            // Turns off what the compiler checks better (import/named) and
+            // teaches the resolver the TypeScript extensions.
+            importPlugin.flatConfigs.typescript,
             react.configs.flat.recommended,
-            eslintPluginJsxA11y.flatConfigs.recommended
+            react.configs.flat["jsx-runtime"],
+            jsxA11y.flatConfigs.recommended
         ],
 
         languageOptions: {
             parserOptions: {
-                project: ["./tsconfig.json"],
+                // Finds each file's tsconfig the way the editor does.
+                projectService: true,
                 tsconfigRootDir: import.meta.dirname
             },
-            ecmaVersion: "latest",
-            sourceType: "module",
-            globals: {
-                ...globals.browser,
-                ...globals.node,
-                ...globals.es2023
-            }
+            // Written out: a plugin's preset below sets 2018, and it would
+            // win over the flat config's own "latest".
+            ecmaVersion: "latest"
         },
 
         settings: {
@@ -66,8 +83,6 @@ export default tseslint.config([
         },
 
         rules: {
-            ...react.configs.flat["jsx-runtime"].rules,
-
             "no-console": [
                 "warn",
                 {
@@ -75,7 +90,6 @@ export default tseslint.config([
                 }
             ],
 
-            "react/react-in-jsx-scope": "off",
             "react/prop-types": "off",
             // <dialog closedby> is in React 19.3, not yet in the plugin's list.
             "react/no-unknown-property": ["error", { ignore: ["closedby"] }],
@@ -146,7 +160,13 @@ export default tseslint.config([
             ],
 
             // Import order for FSD architecture
+            // TypeScript reports a missing module, a missing export and a
+            // wrong default import already, and these are the plugin's
+            // slowest rules.
             "import/no-unresolved": "off",
+            "import/namespace": "off",
+            "import/default": "off",
+            "import/no-named-as-default-member": "off",
             "import/order": [
                 "error",
                 {
@@ -315,6 +335,20 @@ export default tseslint.config([
                     ignoreReadBeforeAssign: false
                 }
             ]
+        }
+    },
+
+    {
+        files: ["src/**/*.{ts,tsx}"],
+        languageOptions: {
+            globals: globals.browser
+        }
+    },
+
+    {
+        files: NODE_FILES,
+        languageOptions: {
+            globals: globals.node
         }
     },
 

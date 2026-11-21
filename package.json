@@ -13,7 +13,7 @@
         "typecheck": "react-router typegen && tsc",
         "lint:style": "stylelint \"src/**/*.css\" --max-warnings 0 --report-needless-disables --report-invalid-scope-disables --report-descriptionless-disables",
         "lint:style:fix": "stylelint \"src/**/*.css\" --fix",
-        "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+        "lint": "eslint . --max-warnings 0",
         "lint:fix": "eslint . --fix",
         "format": "prettier --write .",
         "format:check": "prettier --check .",
