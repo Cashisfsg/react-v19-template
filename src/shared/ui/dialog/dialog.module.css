@@ -109,8 +109,10 @@
     }
 
     /* Every dialog fades, and nothing more: a sheet brings its own slide, and a
-       dialog that should also rise into place asks for it with `motion="rise"`. */
-    :where(.dialog):modal {
+       dialog that should also rise into place asks for it with `motion="rise"`.
+       `[open]` rather than `:modal`: a dialog opened with `show()` is open but
+       not modal, and would stay transparent on the page. */
+    :where(.dialog)[open] {
         opacity: 1;
 
         @starting-style {
@@ -126,7 +128,7 @@
         translate: 0 var(--dialog-translate-y);
     }
 
-    :where(.rise):modal {
+    :where(.rise)[open] {
         --dialog-translate-y: 0px;
         --dialog-scale: 1;
 
