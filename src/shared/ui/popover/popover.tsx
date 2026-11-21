@@ -113,7 +113,11 @@ Trigger.displayName = "Popover.Trigger";
    is a `<form>`, and a plain surface is a `<div>` — which is why that is the
    default rather than the only option. The props follow whatever tag is chosen,
    so `<Popover.Content as="ul">` type-checks against `<ul>` and not against a
-   div. */
+   div. The props the panel reads itself are declared here, since from
+   `React.ComponentProps<E>` they would be `any`; the handlers and the ref name
+   `HTMLElement` rather than the element `as` picks, so `currentTarget` is the
+   general type, and one written for that element still fits, since React
+   checks handler and ref types bivariantly. */
 interface ContentOwnProps {
     /**
      * Where the panel goes by its trigger. Under it unless stated; `false`
