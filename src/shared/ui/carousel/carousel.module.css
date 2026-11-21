@@ -30,7 +30,13 @@
 
         scroll-snap-type: inline mandatory;
 
-        scrollbar-width: thin;
+        /* No bar: the arrows and the dots move between slides, and a swipe or
+           Shift+wheel still scrolls. */
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
     }
 
     /* The glide only for those who have not asked the system for less
