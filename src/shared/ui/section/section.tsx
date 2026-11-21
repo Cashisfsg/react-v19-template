@@ -26,6 +26,26 @@ const byDocumentPosition = (
         ? -1
         : 1;
 
+/* Taken off rather than left empty when there is nothing to point at: a
+   dangling `aria-labelledby` is worse than none, since assistive technology
+   reads nothing where it was promised something. */
+const write = (
+    element: HTMLElement | null,
+    part: SectionPart,
+    registered: RegisteredPart[],
+    given: string | undefined
+) => {
+    if (!element) return;
+
+    const inDocumentOrder = [...registered]
+        .sort(byDocumentPosition)
+        .map(({ id }) => id);
+    const value = [...inDocumentOrder, given].filter(Boolean).join(" ");
+
+    if (value) element.setAttribute(PART_ATTRIBUTE[part], value);
+    else element.removeAttribute(PART_ATTRIBUTE[part]);
+};
+
 interface RootOwnProps {
     "aria-labelledby"?: string | undefined;
     "aria-describedby"?: string | undefined;
@@ -95,37 +115,24 @@ export const Root = <E extends React.ElementType = "section">({
         description: ariaDescribedBy
     });
 
-    const write = useCallback((part: SectionPart) => {
-        const element = node.current;
-        if (!element) return;
-
-        const inDocumentOrder = [...parts.current[part]]
-            .sort(byDocumentPosition)
-            .map(registered => registered.id);
-        const value = [...inDocumentOrder, given.current[part]]
-            .filter(Boolean)
-            .join(" ");
-
-        /* Taken off rather than left empty when there is nothing to point at: a
-           dangling `aria-labelledby` is worse than none, since assistive
-           technology reads nothing where it was promised something. */
-        if (value) element.setAttribute(PART_ATTRIBUTE[part], value);
-        else element.removeAttribute(PART_ATTRIBUTE[part]);
-    }, []);
-
     const register = useCallback(
         (part: SectionPart, id: string, element: Element) => {
             parts.current[part] = [...parts.current[part], { id, element }];
-            write(part);
+            write(node.current, part, parts.current[part], given.current[part]);
 
             return () => {
                 parts.current[part] = parts.current[part].filter(
                     registered => registered.id !== id
                 );
-                write(part);
+                write(
+                    node.current,
+                    part,
+                    parts.current[part],
+                    given.current[part]
+                );
             };
         },
-        [write]
+        []
     );
 
     const context = useMemo(
@@ -133,27 +140,21 @@ export const Root = <E extends React.ElementType = "section">({
         [rootElement, register]
     );
 
-    const rootRef = useCallback((element: HTMLElement) => {
-        node.current = element;
-
-        return () => {
-            node.current = null;
-        };
-    }, []);
-
-    const composedRef = useMemo(
-        () => composeRefs(rootRef, ref),
-        [rootRef, ref]
-    );
+    const composedRef = useMemo(() => composeRefs(node, ref), [ref]);
 
     /* Mount, and every later change to a reference the call site owns. Neither
        is visible to a ref callback: on mount the Root's node is attached after
        its children's, and a prop changing moves nothing at all. */
     useEffect(() => {
         given.current = { label: ariaLabelledBy, description: ariaDescribedBy };
-        write("label");
-        write("description");
-    }, [write, ariaLabelledBy, ariaDescribedBy]);
+        write(node.current, "label", parts.current.label, given.current.label);
+        write(
+            node.current,
+            "description",
+            parts.current.description,
+            given.current.description
+        );
+    }, [ariaLabelledBy, ariaDescribedBy]);
 
     return (
         <SectionContext value={context}>
