@@ -1,14 +1,16 @@
-import path from "path";
-
 import { reactRouter } from "@react-router/dev/vite";
 import { Features } from "lightningcss";
 import { defineConfig } from "vite";
-import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vite.dev/config/
 export default defineConfig({
-    plugins: [reactRouter(), tsconfigPaths()],
+    plugins: [reactRouter()],
     css: {
+        /* The same CSS pipeline in dev as in the build. By default dev runs
+           PostCSS and only the build runs Lightning CSS, so whatever the
+           build rewrites (as it once did to `:dir()`) breaks in production
+           alone. */
+        transformer: "lightningcss",
         lightningcss: {
             /* Lightning CSS rewrites `:dir(rtl)` into a list of `:lang()`s for
                browsers older than the build target, and that list reads only
@@ -17,9 +19,8 @@ export default defineConfig({
             exclude: Features.DirSelector
         }
     },
+    /* `~/*` comes from the paths in tsconfig.json, which Vite reads itself. */
     resolve: {
-        alias: {
-            "~": path.resolve(__dirname, "./src")
-        }
+        tsconfigPaths: true
     }
 });
