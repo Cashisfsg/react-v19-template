@@ -67,8 +67,8 @@ export default defineConfig([
                 projectService: true,
                 tsconfigRootDir: import.meta.dirname
             },
-            // Written out: a plugin's preset below sets 2018, and it would
-            // win over the flat config's own "latest".
+            // Written out: importPlugin.flatConfigs.recommended sets 2018,
+            // and it would win over the flat config's own "latest".
             ecmaVersion: "latest"
         },
 
@@ -159,14 +159,18 @@ export default defineConfig([
                 }
             ],
 
-            // Import order for FSD architecture
-            // TypeScript reports a missing module, a missing export and a
-            // wrong default import already, and these are the plugin's
-            // slowest rules.
+            // TypeScript reports a missing module, a missing export, a
+            // missing namespace member and a default import from a module
+            // without one. no-named-as-default-member is a style check with
+            // false positives (a default export's method named like a named
+            // export). typescript-eslint lists all four as safe to turn off
+            // under TypeScript, and they are the plugin's slowest rules.
+            // https://typescript-eslint.io/troubleshooting/typed-linting/performance#eslint-plugin-import
             "import/no-unresolved": "off",
             "import/namespace": "off",
             "import/default": "off",
             "import/no-named-as-default-member": "off",
+            // Import order for FSD architecture
             "import/order": [
                 "error",
                 {
@@ -340,6 +344,9 @@ export default defineConfig([
 
     {
         files: ["src/**/*.{ts,tsx}"],
+        // Not for no-undef, which typescript-eslint turns off: for
+        // no-global-assign, which stays on and knows a global only from this
+        // list. `document = …` type-checks, and only the rule refuses it.
         languageOptions: {
             globals: globals.browser
         }
