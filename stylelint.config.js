@@ -40,6 +40,41 @@ export default {
             }
         ],
 
+        // Layout in logical terms only: the browser turns `inline-start` and
+        // `block-end` around for right-to-left and vertical text by itself,
+        // where a physical side would need a direction check that can break.
+        // Built-in rules rather than a logical-CSS plugin, whose Stylelint 18
+        // releases are all days old.
+        "property-disallowed-list": [
+            [
+                "/^(top|right|bottom|left)$/",
+                "/^(margin|padding|scroll-margin|scroll-padding|border)-(top|right|bottom|left)(-|$)/",
+                "/^border-(top|bottom)-(left|right)-radius$/",
+                "/^(min-|max-)?(width|height)$/",
+                "/^overscroll-behavior-(x|y)$/"
+            ],
+            {
+                message: property =>
+                    `Use the logical form of "${property}" (inline/block, start/end)`
+            }
+        ],
+        "declaration-property-value-disallowed-list": [
+            {
+                "/^(text-align|float|clear)$/": ["left", "right"],
+                resize: ["horizontal", "vertical"]
+            },
+            {
+                message: (property, value) =>
+                    `Use a logical value instead of "${property}: ${value}" (start/end, inline/block)`
+            }
+        ],
+        // \`[dir]\` reads the attribute on that element alone; \`:dir()\` follows
+        // the direction it inherits, which is what a component sits in.
+        "selector-attribute-name-disallowed-list": [
+            ["dir"],
+            { message: () => "Use :dir() instead of a [dir] selector" }
+        ],
+
         "order/order": ["custom-properties", "declarations"],
         "order/properties-order": propertyGroups.map(group => ({
             ...group,

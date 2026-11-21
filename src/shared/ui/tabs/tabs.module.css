@@ -4,7 +4,7 @@
 
         overflow: auto hidden;
 
-        overscroll-behavior-x: contain;
+        overscroll-behavior-inline: contain;
 
         scroll-snap-type: x mandatory;
 

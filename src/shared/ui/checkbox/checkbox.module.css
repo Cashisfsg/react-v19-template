@@ -1,6 +1,6 @@
 :where(.checkbox) {
-    width: 16px;
-    height: 16px;
+    inline-size: 16px;
+    block-size: 16px;
 
     appearance: none;
     cursor: pointer;
